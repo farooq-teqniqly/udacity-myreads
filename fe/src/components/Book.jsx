@@ -1,6 +1,8 @@
 import PropTypes from "prop-types";
 
-export const Book = ({ title, authors, backgroundImage }) => {
+export const Book = ({ book }) => {
+  const { title, authors, smallThumbnail } = book;
+
   return (
     <div className="book">
       <div className="book-top">
@@ -9,7 +11,7 @@ export const Book = ({ title, authors, backgroundImage }) => {
           style={{
             width: 128,
             height: 193,
-            backgroundImage: `url(${backgroundImage})`,
+            backgroundImage: `url(${smallThumbnail})`,
           }}
         ></div>
         <div className="book-shelf-changer">
@@ -25,13 +27,15 @@ export const Book = ({ title, authors, backgroundImage }) => {
         </div>
       </div>
       <div className="book-title">{title}</div>
-      <div className="book-authors">{authors}</div>
+      <div className="book-authors">{authors.join(", ")}</div>
     </div>
   );
 };
 
 Book.propTypes = {
-  title: PropTypes.string.isRequired,
-  authors: PropTypes.arrayOf(PropTypes.string).isRequired,
-  backgroundImage: PropTypes.string.isRequired,
+  book: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    authors: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+    smallThumbnail: PropTypes.string.isRequired,
+  }),
 };
