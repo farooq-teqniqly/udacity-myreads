@@ -1,10 +1,4 @@
-const verifyEmptyBookshelf = (bookshelfName) => {
-  cy.get(".bookshelf-title")
-    .filter((_, el) => el.textContent.trim() === bookshelfName)
-    .parent()
-    .find(".books-grid li")
-    .should("have.length", 0);
-};
+import { verifyEmptyBookshelf } from "../support/helpers";
 
 describe("`Bookshelf initial load", () => {
   beforeEach(() => {

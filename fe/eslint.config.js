@@ -17,6 +17,9 @@ export default [
         ...globals.browser,
         ...globals.node,
         ...globals.jest,
+        ...globals.cypress,
+        Cypress: "readonly",
+        cy: "readonly",
         vi: "readonly",
         describe: "readonly",
         it: "readonly",
@@ -37,6 +40,7 @@ export default [
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
       prettier,
+      cypress,
     },
     rules: {
       ...js.configs.recommended.rules,
@@ -49,6 +53,7 @@ export default [
         { allowConstantExport: true },
       ],
       "prettier/prettier": "warn",
+      ...cypress.configs.recommended.rules,
     },
   },
   {

@@ -23,3 +23,11 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add("addBook", () => {
+  cy.get(".open-search a").should("be.visible").click();
+});
+
+Cypress.Commands.add("closeSearch", () => {
+  cy.get(".search-books-bar a").should("be.visible").click();
+});
