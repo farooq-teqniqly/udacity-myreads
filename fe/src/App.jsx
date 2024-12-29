@@ -1,10 +1,13 @@
 import "./App.css";
 import { useState } from "react";
-import * as DummyBooks from "./data/dummyBooks";
 import { Bookshelf } from "./components/Bookshelf";
 
 const App = () => {
   const [showSearchPage, setShowSearchpage] = useState(false);
+
+  const [currentlyReading] = useState([]);
+  const [wantToRead] = useState([]);
+  const [alreadyRead] = useState([]);
 
   return (
     <div className="app">
@@ -35,12 +38,9 @@ const App = () => {
           </div>
           <div className="list-books-content">
             <div>
-              <Bookshelf
-                label="Currently Reading"
-                books={DummyBooks.currentlyReading}
-              />
-              <Bookshelf label="Want to Read" books={DummyBooks.wantToRead} />
-              <Bookshelf label="Read" books={DummyBooks.alreadyRead} />
+              <Bookshelf label="Currently Reading" books={currentlyReading} />
+              <Bookshelf label="Want to Read" books={wantToRead} />
+              <Bookshelf label="Read" books={alreadyRead} />
             </div>
           </div>
           <div className="open-search">
