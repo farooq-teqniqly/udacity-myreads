@@ -14,7 +14,7 @@ const verifyBooksInBookshelf = (bookshelfName, expectedBooks) => {
 
 describe("`Bookshelf initial load", () => {
   beforeEach(() => {
-    cy.visit("http://localhost:5174");
+    cy.visit("/");
   });
 
   it("should display the `Currently Reading` bookshelf", () => {
