@@ -8,7 +8,7 @@ import prettierConfig from "eslint-config-prettier";
 import cypress from "eslint-plugin-cypress";
 
 export default [
-  { ignores: ["dist"] },
+  { ignores: ["dist", "node_modules", "**/*.css", "**/*.json"] },
   {
     files: ["**/*.{js,jsx}"],
     languageOptions: {
