@@ -5,6 +5,7 @@ import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import prettier from "eslint-plugin-prettier";
 import prettierConfig from "eslint-config-prettier";
+import cypress from "eslint-plugin-cypress";
 
 export default [
   { ignores: ["dist"] },
@@ -54,6 +55,25 @@ export default [
     files: ["**/*.{js,jsx}"],
     rules: {
       ...prettierConfig.rules,
+    },
+  },
+  {
+    files: ["cypress/**/*.cy.js"], // Include Cypress test files
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        ...globals.jest,
+        ...globals.mocha,
+        ...globals.cypress,
+        cy: "readonly",
+      },
+    },
+    plugins: {
+      cypress,
+    },
+    rules: {
+      ...cypress.configs.recommended.rules,
     },
   },
 ];

@@ -8,7 +8,8 @@
   },
   "scripts": {
     "prepare": "husky install",
-    "test": "npm --prefix ./fe run test:ci"
+    "test": "npm --prefix ./fe run test:ci",
+    "e2e": "npm --prefix ./fe run e2e:ci"
   },
   "lint-staged": {
     "fe/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
