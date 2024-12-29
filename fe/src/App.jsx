@@ -2,6 +2,7 @@ import "./App.css";
 import { useState } from "react";
 import { Bookshelf } from "./components/Bookshelf";
 import { SearchBook } from "./components/SearchBook";
+import { SearchResults } from "./components/SearchResults";
 
 const App = () => {
   const [showSearchPage, setShowSearchPage] = useState(false);
@@ -15,9 +16,7 @@ const App = () => {
       {showSearchPage ? (
         <div className="search-books">
           <SearchBook onClose={() => setShowSearchPage(!showSearchPage)} />
-          <div className="search-books-results">
-            <ol className="books-grid"></ol>
-          </div>
+          <SearchResults />
         </div>
       ) : (
         <div className="list-books">
