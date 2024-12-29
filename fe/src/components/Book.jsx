@@ -32,6 +32,6 @@ export const Book = ({ title, authors, backgroundImage }) => {
 
 Book.propTypes = {
   title: PropTypes.string.isRequired,
-  authors: PropTypes.string.isRequired,
+  authors: PropTypes.arrayOf(PropTypes.string).isRequired,
   backgroundImage: PropTypes.string.isRequired,
 };
