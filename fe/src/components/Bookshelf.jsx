@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { Book } from "./Book";
 
-export const Bookshelf = ({ label, books }) => {
+export const Bookshelf = ({ label, books, onBookSelected }) => {
   return (
     <div className="bookshelf">
       <h2 className="bookshelf-title">{label}</h2>
@@ -10,7 +10,7 @@ export const Bookshelf = ({ label, books }) => {
           {books.map((book) => {
             return (
               <li key={book.id}>
-                <Book book={book}></Book>
+                <Book book={book} onSelected={onBookSelected}></Book>
               </li>
             );
           })}
@@ -29,4 +29,5 @@ Bookshelf.propTypes = {
       smallThumbnail: PropTypes.string.isRequired,
     })
   ).isRequired,
+  onBookSelected: PropTypes.func.isRequired,
 };

@@ -9,9 +9,6 @@ const App = () => {
   const [showSearchPage, setShowSearchPage] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [query, setQuery] = useState("");
-  const [currentlyReading] = useState([]);
-  const [wantToRead] = useState([]);
-  const [alreadyRead] = useState([]);
 
   const handleSearchClose = () => {
     setShowSearchPage(!showSearchPage);
@@ -40,6 +37,26 @@ const App = () => {
     setQuery(trimmedQuery);
   };
 
+  const [currentlyReading, setCurrentlyReading] = useState([]);
+  const [wantToRead, setWantToRead] = useState([]);
+  const [alreadyRead, setAlreadyRead] = useState([]);
+
+  const handleBookSelection = (shelfId, selectedBook) => {
+    switch (shelfId) {
+      case "CURRENTLY_READING":
+        setCurrentlyReading((prev) => [...prev, selectedBook]);
+        break;
+      case "WANT_TO_READ":
+        setWantToRead((prev) => [...prev, selectedBook]);
+        break;
+      case "ALREADY_READ":
+        setAlreadyRead((prev) => [...prev, selectedBook]);
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <div className="app">
       {showSearchPage ? (
@@ -48,7 +65,10 @@ const App = () => {
             onClose={handleSearchClose}
             onSearch={(q) => handleSearch(q)}
           />
-          <SearchResults results={searchResults} />
+          <SearchResults
+            results={searchResults}
+            onBookSelected={handleBookSelection}
+          />
         </div>
       ) : (
         <div className="list-books">
@@ -57,9 +77,21 @@ const App = () => {
           </div>
           <div className="list-books-content">
             <div>
-              <Bookshelf label="Currently Reading" books={currentlyReading} />
-              <Bookshelf label="Want to Read" books={wantToRead} />
-              <Bookshelf label="Read" books={alreadyRead} />
+              <Bookshelf
+                label="Currently Reading"
+                books={currentlyReading}
+                onBookSelected={handleBookSelection}
+              />
+              <Bookshelf
+                label="Want to Read"
+                books={wantToRead}
+                onBookSelected={handleBookSelection}
+              />
+              <Bookshelf
+                label="Read"
+                books={alreadyRead}
+                onBookSelected={handleBookSelection}
+              />
             </div>
           </div>
           <div className="open-search">

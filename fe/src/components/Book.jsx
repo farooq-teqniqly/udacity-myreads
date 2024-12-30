@@ -1,12 +1,31 @@
 import PropTypes from "prop-types";
+import { useState } from "react";
 
-export const Book = ({ book }) => {
+export const Book = ({ book, onSelected }) => {
+  const SHELVES = {
+    CURRENTLY_READING: "Currently Reading",
+    WANT_TO_READ: "Want to Read",
+    ALREADY_READ: "Read",
+    NONE: "None",
+  };
+
   const { title, smallThumbnail } = book;
   let authors = book.authors;
 
   if (!authors) {
     authors = ["No author listed"];
   }
+
+  const [selectedShelf, setSelectedShelf] = useState("");
+
+  const handleSelectedShelf = (shelfId, book) => {
+    if (selectedShelf === shelfId) {
+      return;
+    }
+
+    setSelectedShelf(shelfId);
+    onSelected(shelfId, book);
+  };
 
   return (
     <div className="book">
@@ -20,14 +39,18 @@ export const Book = ({ book }) => {
           }}
         ></div>
         <div className="book-shelf-changer">
-          <select>
+          <select onChange={(e) => handleSelectedShelf(e.target.value, book)}>
             <option value="none" disabled>
               Move to...
             </option>
-            <option value="currentlyReading">Currently Reading</option>
-            <option value="wantToRead">Want to Read</option>
-            <option value="read">Read</option>
-            <option value="none">None</option>
+            <option value="separator" selected="true" disabled>
+              -----
+            </option>
+            {Object.entries(SHELVES).map(([id, name]) => (
+              <option key={id} value={id}>
+                {name} {selectedShelf === id ? "✓" : ""}
+              </option>
+            ))}
           </select>
         </div>
       </div>
@@ -43,4 +66,5 @@ Book.propTypes = {
     authors: PropTypes.arrayOf(PropTypes.string),
     smallThumbnail: PropTypes.string.isRequired,
   }),
+  onSelected: PropTypes.func.isRequired,
 };

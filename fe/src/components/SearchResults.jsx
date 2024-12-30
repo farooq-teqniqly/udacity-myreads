@@ -1,13 +1,13 @@
 import PropTypes from "prop-types";
 import { Book } from "./Book";
 
-export const SearchResults = ({ results }) => {
+export const SearchResults = ({ results, onBookSelected }) => {
   return (
     <div className="search-books-results">
       <ol className="books-grid">
         {results.map((result) => (
           <li key={result.id}>
-            <Book book={result}></Book>
+            <Book book={result} onSelected={onBookSelected}></Book>
           </li>
         ))}
       </ol>
@@ -23,4 +23,5 @@ SearchResults.propTypes = {
       smallThumbnail: PropTypes.string.isRequired,
     })
   ).isRequired,
+  onBookSelected: PropTypes.func.isRequired,
 };

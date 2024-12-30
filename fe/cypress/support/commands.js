@@ -31,3 +31,9 @@ Cypress.Commands.add("addBook", () => {
 Cypress.Commands.add("closeSearch", () => {
   cy.get(".close-search").should("be.visible").click();
 });
+
+Cypress.Commands.add("search", (query) => {
+  cy.get("input").clear();
+  cy.get("input").type(query);
+  cy.get("#search-book-button").click();
+});
