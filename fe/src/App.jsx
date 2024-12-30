@@ -4,6 +4,7 @@ import { Bookshelf } from "./components/Bookshelf";
 import { SearchBook } from "./components/SearchBook";
 import { SearchResults } from "./components/SearchResults";
 import * as api from "./BooksAPI";
+import { SHELVES } from "./shelves";
 
 const App = () => {
   const [showSearchPage, setShowSearchPage] = useState(false);
@@ -13,6 +14,7 @@ const App = () => {
   const handleSearchClose = () => {
     setShowSearchPage(!showSearchPage);
     setSearchResults([]);
+    setQuery("");
   };
 
   const handleSearch = async (q) => {
@@ -43,13 +45,13 @@ const App = () => {
 
   const handleBookSelection = (shelfId, selectedBook) => {
     switch (shelfId) {
-      case "CURRENTLY_READING":
+      case SHELVES["CURRENTLY_READING"].id:
         setCurrentlyReading((prev) => [...prev, selectedBook]);
         break;
-      case "WANT_TO_READ":
+      case SHELVES["WANT_TO_READ"].id:
         setWantToRead((prev) => [...prev, selectedBook]);
         break;
-      case "ALREADY_READ":
+      case SHELVES["ALREADY_READ"].id:
         setAlreadyRead((prev) => [...prev, selectedBook]);
         break;
       default:
@@ -78,16 +80,19 @@ const App = () => {
           <div className="list-books-content">
             <div>
               <Bookshelf
+                id={SHELVES["CURRENTLY_READING"].id}
                 label="Currently Reading"
                 books={currentlyReading}
                 onBookSelected={handleBookSelection}
               />
               <Bookshelf
+                id={SHELVES["WANT_TO_READ"].id}
                 label="Want to Read"
                 books={wantToRead}
                 onBookSelected={handleBookSelection}
               />
               <Bookshelf
+                id={SHELVES["ALREADY_READ"].id}
                 label="Read"
                 books={alreadyRead}
                 onBookSelected={handleBookSelection}

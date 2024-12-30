@@ -37,3 +37,11 @@ Cypress.Commands.add("search", (query) => {
   cy.get("input").type(query);
   cy.get("#search-book-button").click();
 });
+
+Cypress.Commands.add("addBookToShelf", (bookIndex, shelfId) => {
+  cy.get(".book-title")
+    .eq(bookIndex)
+    .parent()
+    .find(".book-shelf-changer select")
+    .select(shelfId);
+});

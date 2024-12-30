@@ -1,14 +1,8 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
+import { SHELVES } from "../shelves";
 
 export const Book = ({ book, onSelected }) => {
-  const SHELVES = {
-    CURRENTLY_READING: "Currently Reading",
-    WANT_TO_READ: "Want to Read",
-    ALREADY_READ: "Read",
-    NONE: "None",
-  };
-
   const { title, smallThumbnail } = book;
   let authors = book.authors;
 
@@ -39,16 +33,19 @@ export const Book = ({ book, onSelected }) => {
           }}
         ></div>
         <div className="book-shelf-changer">
-          <select onChange={(e) => handleSelectedShelf(e.target.value, book)}>
+          <select
+            defaultValue="separator"
+            onChange={(e) => handleSelectedShelf(e.target.value, book)}
+          >
             <option value="none" disabled>
               Move to...
             </option>
-            <option value="separator" selected="true" disabled>
+            <option value="separator" disabled>
               -----
             </option>
-            {Object.entries(SHELVES).map(([id, name]) => (
-              <option key={id} value={id}>
-                {name} {selectedShelf === id ? "✓" : ""}
+            {Object.entries(SHELVES).map(([, shelf]) => (
+              <option key={shelf.id} value={shelf.id}>
+                {shelf.label} {selectedShelf === shelf.id ? "✓" : ""}
               </option>
             ))}
           </select>

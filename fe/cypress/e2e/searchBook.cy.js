@@ -3,7 +3,7 @@ describe("search books", () => {
     cy.visit("/");
   });
 
-  it("returns the books in search results", () => {
+  it("can search for multiple topics", () => {
     cy.addBook();
     cy.search("history");
 
@@ -31,5 +31,18 @@ describe("search books", () => {
       .then((text) => {
         expect(text.trim()).to.equal("The Hatred of Poetry");
       });
+  });
+
+  it("can search, go back, and do the same search again", () => {
+    cy.addBook();
+    cy.search("history");
+
+    cy.get(".book").should("have.length", 20);
+
+    cy.closeSearch();
+    cy.addBook();
+    cy.search("history");
+
+    cy.get(".book").should("have.length", 20);
   });
 });
