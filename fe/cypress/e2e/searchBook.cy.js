@@ -1,10 +1,32 @@
+import { verifyAllBookshelvesNotVisible } from "../support/helpers";
+
 describe("search books", () => {
   beforeEach(() => {
     cy.visit("/");
+    cy.addBook();
+  });
+
+  it("shows the search form and not the bookshelves", () => {
+    cy.get(".search-books-input-wrapper input")
+      .should("be.visible")
+      .should("have.attr", "placeholder", "Search by title, author, or ISBN");
+
+    verifyAllBookshelvesNotVisible();
+  });
+
+  it("returns to the bookshelves when the close button is clicked", () => {
+    cy.closeSearch();
+
+    const bookshelves = ["Currently Reading", "Want to Read", "Read"];
+
+    bookshelves.forEach((shelf) => {
+      cy.get(".bookshelf-title")
+        .filter((_, el) => el.textContent.trim() === shelf)
+        .should("be.visible");
+    });
   });
 
   it("can search for multiple topics", () => {
-    cy.addBook();
     cy.search("history");
 
     cy.get(".book").should("have.length", 20);
@@ -34,7 +56,6 @@ describe("search books", () => {
   });
 
   it("can search, go back, and do the same search again", () => {
-    cy.addBook();
     cy.search("history");
 
     cy.get(".book").should("have.length", 20);
