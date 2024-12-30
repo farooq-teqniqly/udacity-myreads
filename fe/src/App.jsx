@@ -8,7 +8,7 @@ import * as api from "./BooksAPI";
 const App = () => {
   const [showSearchPage, setShowSearchPage] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
-
+  const [query, setQuery] = useState("");
   const [currentlyReading] = useState([]);
   const [wantToRead] = useState([]);
   const [alreadyRead] = useState([]);
@@ -18,8 +18,14 @@ const App = () => {
     setSearchResults([]);
   };
 
-  const handleSearch = async (query) => {
-    const res = await api.search(query);
+  const handleSearch = async (q) => {
+    const trimmedQuery = q.trim();
+
+    if (trimmedQuery === query) {
+      return;
+    }
+
+    const res = await api.search(trimmedQuery);
 
     const books = res.map(({ id, title, authors, imageLinks }) => {
       return {
@@ -31,6 +37,7 @@ const App = () => {
     });
 
     setSearchResults(books);
+    setQuery(trimmedQuery);
   };
 
   return (
@@ -39,7 +46,7 @@ const App = () => {
         <div className="search-books">
           <SearchBook
             onClose={handleSearchClose}
-            onSearch={(query) => handleSearch(query)}
+            onSearch={(q) => handleSearch(q)}
           />
           <SearchResults results={searchResults} />
         </div>
