@@ -43,45 +43,26 @@ const App = () => {
   const [wantToRead, setWantToRead] = useState([]);
   const [alreadyRead, setAlreadyRead] = useState([]);
 
-  const handleBookSelection = (shelfId, selectedBook) => {
-    switch (shelfId) {
+  const updateShelves = (selectedShelfId, selectedBook) => {
+    setCurrentlyReading((prev) => prev.filter((b) => b.id !== selectedBook.id));
+    setWantToRead((prev) => prev.filter((b) => b.id !== selectedBook.id));
+    setAlreadyRead((prev) => prev.filter((b) => b.id !== selectedBook.id));
+
+    switch (selectedShelfId) {
       case SHELVES["CURRENTLY_READING"].id:
         setCurrentlyReading((prev) => [...prev, selectedBook]);
-
-        setWantToRead((prev) => {
-          return prev.filter((b) => b.id !== selectedBook.id);
-        });
-
-        setAlreadyRead((prev) => {
-          return prev.filter((b) => b.id !== selectedBook.id);
-        });
-
         break;
       case SHELVES["WANT_TO_READ"].id:
         setWantToRead((prev) => [...prev, selectedBook]);
-
-        setCurrentlyReading((prev) => {
-          return prev.filter((b) => b.id !== selectedBook.id);
-        });
-
-        setAlreadyRead((prev) => {
-          return prev.filter((b) => b.id !== selectedBook.id);
-        });
         break;
       case SHELVES["ALREADY_READ"].id:
         setAlreadyRead((prev) => [...prev, selectedBook]);
-
-        setWantToRead((prev) => {
-          return prev.filter((b) => b.id !== selectedBook.id);
-        });
-
-        setCurrentlyReading((prev) => {
-          return prev.filter((b) => b.id !== selectedBook.id);
-        });
-        break;
-      default:
         break;
     }
+  };
+
+  const handleBookSelection = (selectedShelfId, selectedBook) => {
+    updateShelves(selectedShelfId, selectedBook);
   };
 
   return (
