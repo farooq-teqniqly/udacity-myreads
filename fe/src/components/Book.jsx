@@ -1,7 +1,12 @@
 import PropTypes from "prop-types";
 
 export const Book = ({ book }) => {
-  const { title, authors, smallThumbnail } = book;
+  const { title, smallThumbnail } = book;
+  let authors = book.authors;
+
+  if (!authors) {
+    authors = ["No author listed"];
+  }
 
   return (
     <div className="book">
@@ -35,7 +40,7 @@ export const Book = ({ book }) => {
 Book.propTypes = {
   book: PropTypes.shape({
     title: PropTypes.string.isRequired,
-    authors: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+    authors: PropTypes.arrayOf(PropTypes.string),
     smallThumbnail: PropTypes.string.isRequired,
   }),
 };

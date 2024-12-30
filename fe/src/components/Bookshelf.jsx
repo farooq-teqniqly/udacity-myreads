@@ -25,7 +25,7 @@ Bookshelf.propTypes = {
   books: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string.isRequired,
-      authors: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+      authors: PropTypes.arrayOf(PropTypes.string),
       smallThumbnail: PropTypes.string.isRequired,
     })
   ).isRequired,

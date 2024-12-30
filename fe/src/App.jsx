@@ -3,20 +3,45 @@ import { useState } from "react";
 import { Bookshelf } from "./components/Bookshelf";
 import { SearchBook } from "./components/SearchBook";
 import { SearchResults } from "./components/SearchResults";
+import * as api from "./BooksAPI";
 
 const App = () => {
   const [showSearchPage, setShowSearchPage] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
 
   const [currentlyReading] = useState([]);
   const [wantToRead] = useState([]);
   const [alreadyRead] = useState([]);
 
+  const handleSearchClose = () => {
+    setShowSearchPage(!showSearchPage);
+    setSearchResults([]);
+  };
+
+  const handleSearch = async (query) => {
+    const res = await api.search(query);
+
+    const books = res.map(({ id, title, authors, imageLinks }) => {
+      return {
+        id,
+        title,
+        authors,
+        smallThumbnail: imageLinks.smallThumbnail,
+      };
+    });
+
+    setSearchResults(books);
+  };
+
   return (
     <div className="app">
       {showSearchPage ? (
         <div className="search-books">
-          <SearchBook onClose={() => setShowSearchPage(!showSearchPage)} />
-          <SearchResults />
+          <SearchBook
+            onClose={handleSearchClose}
+            onSearch={(query) => handleSearch(query)}
+          />
+          <SearchResults results={searchResults} />
         </div>
       ) : (
         <div className="list-books">
