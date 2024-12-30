@@ -5,6 +5,7 @@ import { SearchBook } from "./components/SearchBook";
 import { SearchResults } from "./components/SearchResults";
 import * as api from "./BooksAPI";
 import { SHELVES } from "./shelves";
+import { useShelves } from "./hooks/useShelves";
 
 const App = () => {
   const [showSearchPage, setShowSearchPage] = useState(false);
@@ -39,30 +40,10 @@ const App = () => {
     setQuery(trimmedQuery);
   };
 
-  const [currentlyReading, setCurrentlyReading] = useState([]);
-  const [wantToRead, setWantToRead] = useState([]);
-  const [alreadyRead, setAlreadyRead] = useState([]);
-
-  const updateShelves = (selectedShelfId, selectedBook) => {
-    setCurrentlyReading((prev) => prev.filter((b) => b.id !== selectedBook.id));
-    setWantToRead((prev) => prev.filter((b) => b.id !== selectedBook.id));
-    setAlreadyRead((prev) => prev.filter((b) => b.id !== selectedBook.id));
-
-    switch (selectedShelfId) {
-      case SHELVES["CURRENTLY_READING"].id:
-        setCurrentlyReading((prev) => [...prev, selectedBook]);
-        break;
-      case SHELVES["WANT_TO_READ"].id:
-        setWantToRead((prev) => [...prev, selectedBook]);
-        break;
-      case SHELVES["ALREADY_READ"].id:
-        setAlreadyRead((prev) => [...prev, selectedBook]);
-        break;
-    }
-  };
+  const { placeBook, getShelf } = useShelves();
 
   const handleBookSelection = (selectedShelfId, selectedBook) => {
-    updateShelves(selectedShelfId, selectedBook);
+    placeBook(selectedShelfId, selectedBook);
   };
 
   return (
@@ -88,19 +69,19 @@ const App = () => {
               <Bookshelf
                 id={SHELVES["CURRENTLY_READING"].id}
                 label="Currently Reading"
-                books={currentlyReading}
+                books={getShelf(SHELVES["CURRENTLY_READING"].id)}
                 onBookSelected={handleBookSelection}
               />
               <Bookshelf
                 id={SHELVES["WANT_TO_READ"].id}
                 label="Want to Read"
-                books={wantToRead}
+                books={getShelf(SHELVES["WANT_TO_READ"].id)}
                 onBookSelected={handleBookSelection}
               />
               <Bookshelf
                 id={SHELVES["ALREADY_READ"].id}
                 label="Read"
-                books={alreadyRead}
+                books={getShelf(SHELVES["ALREADY_READ"].id)}
                 onBookSelected={handleBookSelection}
               />
             </div>
