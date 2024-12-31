@@ -10,7 +10,7 @@ export const Book = ({ book, onSelected }) => {
     authors = ["No author listed"];
   }
 
-  const [selectedShelf, setSelectedShelf] = useState("");
+  const [selectedShelf, setSelectedShelf] = useState("none");
 
   const handleSelectedShelf = (shelfId, book) => {
     if (selectedShelf === shelfId) {

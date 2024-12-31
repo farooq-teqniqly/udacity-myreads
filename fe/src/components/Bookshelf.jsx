@@ -1,7 +1,11 @@
 import PropTypes from "prop-types";
 import { Book } from "./Book";
 
-export const Bookshelf = ({ label, books, onBookSelected, id }) => {
+export const Bookshelf = ({ label, books, onBookSelected, id, visible }) => {
+  if (!visible) {
+    return null;
+  }
+
   return (
     <div id={id} className="bookshelf">
       <h2 className="bookshelf-title">{label}</h2>
@@ -31,4 +35,5 @@ Bookshelf.propTypes = {
     })
   ).isRequired,
   onBookSelected: PropTypes.func.isRequired,
+  visible: PropTypes.bool.isRequired,
 };

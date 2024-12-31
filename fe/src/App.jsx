@@ -45,6 +45,7 @@ const App = () => {
                   label={shelf.label}
                   books={getShelf(shelf.id)}
                   onBookSelected={placeBook}
+                  visible={shelf.visible}
                 />
               ))}
             </div>

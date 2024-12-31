@@ -16,6 +16,8 @@ export const useShelves = () => {
     loadShelf(SHELVES["ALREADY_READ"].id)
   );
 
+  const [none, setNone] = useState(loadShelf(SHELVES["NONE"].id));
+
   const saveShelves = useCallback(() => {
     localStorage.setItem(
       SHELVES["CURRENTLY_READING"].id,
@@ -52,6 +54,9 @@ export const useShelves = () => {
       case SHELVES["ALREADY_READ"].id:
         setAlreadyRead((prev) => [...prev, selectedBook]);
         break;
+      case SHELVES["NONE"].id:
+        setNone((prev) => [...prev, selectedBook]);
+        break;
     }
   };
 
@@ -67,6 +72,8 @@ export const useShelves = () => {
         return currentlyReading;
       case SHELVES["ALREADY_READ"].id:
         return alreadyRead;
+      case SHELVES["NONE"].id:
+        return none;
       default:
         throw new Error(`invalid shelfId: ${shelfId}`);
     }
