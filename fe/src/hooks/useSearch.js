@@ -9,11 +9,11 @@ export const useSearch = () => {
   const [query, setQuery] = useState("");
 
   const openSearch = () => {
-    setShowSearchPage(!showSearchPage);
+    setShowSearchPage(true);
   };
 
   const closeSearch = () => {
-    setShowSearchPage(!showSearchPage);
+    setShowSearchPage(false);
     setSearchResults([]);
     setQuery("");
     setNoResults(false);
