@@ -41,8 +41,11 @@ export const useShelves = () => {
     }
   };
 
+  const getAllShelves = () => Object.values(SHELVES);
+
   return {
     placeBook,
     getShelf,
+    getAllShelves,
   };
 };

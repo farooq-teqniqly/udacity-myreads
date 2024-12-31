@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
-import { SHELVES } from "../shelves";
+import { useShelves } from "../hooks/useShelves";
 
 export const Book = ({ book, onSelected }) => {
   const { title, smallThumbnail } = book;
@@ -20,6 +20,8 @@ export const Book = ({ book, onSelected }) => {
     setSelectedShelf(shelfId);
     onSelected(shelfId, book);
   };
+
+  const { getAllShelves } = useShelves();
 
   return (
     <div className="book">
@@ -43,7 +45,7 @@ export const Book = ({ book, onSelected }) => {
             <option value="separator" disabled>
               -----
             </option>
-            {Object.entries(SHELVES).map(([, shelf]) => (
+            {getAllShelves().map((shelf) => (
               <option key={shelf.id} value={shelf.id}>
                 {shelf.label} {selectedShelf === shelf.id ? "✓" : ""}
               </option>
