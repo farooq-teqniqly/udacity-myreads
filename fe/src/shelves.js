@@ -11,8 +11,4 @@ export const SHELVES = {
     id: "already-read",
     label: "Read",
   },
-  NONE: {
-    id: "none",
-    label: "None",
-  },
 };

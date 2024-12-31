@@ -66,24 +66,15 @@ const App = () => {
           </div>
           <div className="list-books-content">
             <div>
-              <Bookshelf
-                id={SHELVES["CURRENTLY_READING"].id}
-                label="Currently Reading"
-                books={getShelf(SHELVES["CURRENTLY_READING"].id)}
-                onBookSelected={handleBookSelection}
-              />
-              <Bookshelf
-                id={SHELVES["WANT_TO_READ"].id}
-                label="Want to Read"
-                books={getShelf(SHELVES["WANT_TO_READ"].id)}
-                onBookSelected={handleBookSelection}
-              />
-              <Bookshelf
-                id={SHELVES["ALREADY_READ"].id}
-                label="Read"
-                books={getShelf(SHELVES["ALREADY_READ"].id)}
-                onBookSelected={handleBookSelection}
-              />
+              {Object.values(SHELVES).map((shelf) => (
+                <Bookshelf
+                  key={shelf.id}
+                  id={shelf.id}
+                  label={shelf.label}
+                  books={getShelf(shelf.id)}
+                  onBookSelected={handleBookSelection}
+                />
+              ))}
             </div>
           </div>
           <div className="open-search">
