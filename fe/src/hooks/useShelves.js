@@ -1,10 +1,41 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { SHELVES } from "../shelves";
 
+const loadShelf = (shelfId) => JSON.parse(localStorage.getItem(shelfId)) || [];
+
 export const useShelves = () => {
-  const [currentlyReading, setCurrentlyReading] = useState([]);
-  const [wantToRead, setWantToRead] = useState([]);
-  const [alreadyRead, setAlreadyRead] = useState([]);
+  const [currentlyReading, setCurrentlyReading] = useState(
+    loadShelf(SHELVES["CURRENTLY_READING"].id)
+  );
+
+  const [wantToRead, setWantToRead] = useState(
+    loadShelf(SHELVES["WANT_TO_READ"].id)
+  );
+
+  const [alreadyRead, setAlreadyRead] = useState(
+    loadShelf(SHELVES["ALREADY_READ"].id)
+  );
+
+  const saveShelves = useCallback(() => {
+    localStorage.setItem(
+      SHELVES["CURRENTLY_READING"].id,
+      JSON.stringify(currentlyReading)
+    );
+
+    localStorage.setItem(
+      SHELVES["WANT_TO_READ"].id,
+      JSON.stringify(wantToRead)
+    );
+
+    localStorage.setItem(
+      SHELVES["ALREADY_READ"].id,
+      JSON.stringify(alreadyRead)
+    );
+  }, [currentlyReading, wantToRead, alreadyRead]);
+
+  useEffect(() => {
+    saveShelves();
+  }, [saveShelves]);
 
   const updateShelves = (selectedShelfId, selectedBook) => {
     setCurrentlyReading((prev) => prev.filter((b) => b.id !== selectedBook.id));

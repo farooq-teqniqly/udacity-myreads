@@ -85,16 +85,19 @@ describe("search returns no results", () => {
 
   it("clears the message when search returns results", () => {
     cy.search("xyz");
-
     /* eslint-disable-next-line cypress/no-unnecessary-waiting */
     cy.wait(2000);
 
     cy.search("history");
+    /* eslint-disable-next-line cypress/no-unnecessary-waiting */
+    cy.wait(2000);
     cy.get(".search-no-results span").should("not.exist");
   });
 
   it("clears the message when search is closed", () => {
     cy.search("xyz");
+    /* eslint-disable-next-line cypress/no-unnecessary-waiting */
+    cy.wait(2000);
     cy.closeSearch();
     cy.addBook();
     cy.get(".search-no-results span").should("not.exist");
