@@ -4,7 +4,7 @@ import { useState } from "react";
 export const useSearch = () => {
   const [showSearchPage, setShowSearchPage] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
-  const [showNoResultsMessage, setShowNoResultsMessage] = useState(false);
+  const [noResults, setNoResults] = useState(false);
   const [apiError, setApiError] = useState(false);
   const [query, setQuery] = useState("");
 
@@ -16,7 +16,7 @@ export const useSearch = () => {
     setShowSearchPage(!showSearchPage);
     setSearchResults([]);
     setQuery("");
-    setShowNoResultsMessage(false);
+    setNoResults(false);
     setApiError(false);
   };
 
@@ -49,9 +49,9 @@ export const useSearch = () => {
           smallThumbnail: imageLinks.smallThumbnail,
         };
       });
-      setShowNoResultsMessage(false);
+      setNoResults(false);
     } else {
-      setShowNoResultsMessage(true);
+      setNoResults(true);
     }
 
     setSearchResults(books);
@@ -64,7 +64,7 @@ export const useSearch = () => {
     search,
     closeSearch,
     openSearch,
-    showNoResultsMessage,
+    noResults,
     apiError,
   };
 };

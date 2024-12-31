@@ -15,7 +15,7 @@ const App = () => {
     search,
     closeSearch,
     openSearch,
-    showNoResultsMessage,
+    noResults,
     apiError,
   } = useSearch();
 
@@ -27,7 +27,7 @@ const App = () => {
           <SearchResults
             results={searchResults}
             onBookSelected={placeBook}
-            showNoResultsMessage={showNoResultsMessage}
+            showNoResultsMessage={noResults}
             showApiErrorMessage={apiError}
           />
         </div>
