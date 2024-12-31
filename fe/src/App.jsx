@@ -9,15 +9,25 @@ import { useSearch } from "./hooks/useSearch";
 const App = () => {
   const { placeBook, getShelf } = useShelves();
 
-  const { showSearchPage, searchResults, search, closeSearch, openSearch } =
-    useSearch();
+  const {
+    showSearchPage,
+    searchResults,
+    search,
+    closeSearch,
+    openSearch,
+    showNoResultsMessage,
+  } = useSearch();
 
   return (
     <div className="app">
       {showSearchPage ? (
         <div className="search-books">
           <SearchBook onClose={closeSearch} onSearch={(q) => search(q)} />
-          <SearchResults results={searchResults} onBookSelected={placeBook} />
+          <SearchResults
+            results={searchResults}
+            onBookSelected={placeBook}
+            showNoResultsMessage={showNoResultsMessage}
+          />
         </div>
       ) : (
         <div className="list-books">

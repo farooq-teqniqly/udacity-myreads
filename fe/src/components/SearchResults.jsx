@@ -1,7 +1,20 @@
 import PropTypes from "prop-types";
 import { Book } from "./Book";
 
-export const SearchResults = ({ results, onBookSelected }) => {
+export const SearchResults = ({
+  results,
+  onBookSelected,
+  showNoResultsMessage,
+}) => {
+  {
+    if (showNoResultsMessage) {
+      return (
+        <div className="search-no-results">
+          <span>Your search yielded no results.</span>
+        </div>
+      );
+    }
+  }
   return (
     <div className="search-books-results">
       <ol className="books-grid">
@@ -24,4 +37,5 @@ SearchResults.propTypes = {
     })
   ).isRequired,
   onBookSelected: PropTypes.func.isRequired,
+  showNoResultsMessage: PropTypes.bool.isRequired,
 };

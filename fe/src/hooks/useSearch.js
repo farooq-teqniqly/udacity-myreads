@@ -4,6 +4,7 @@ import { useState } from "react";
 export const useSearch = () => {
   const [showSearchPage, setShowSearchPage] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
+  const [showNoResultsMessage, setShowNoResultsMessage] = useState(false);
   const [query, setQuery] = useState("");
 
   const openSearch = () => {
@@ -14,6 +15,7 @@ export const useSearch = () => {
     setShowSearchPage(!showSearchPage);
     setSearchResults([]);
     setQuery("");
+    setShowNoResultsMessage(false);
   };
 
   const search = async (searchTerm) => {
@@ -25,14 +27,21 @@ export const useSearch = () => {
 
     const res = await api.search(trimmedQuery);
 
-    const books = res.map(({ id, title, authors, imageLinks }) => {
-      return {
-        id,
-        title,
-        authors,
-        smallThumbnail: imageLinks.smallThumbnail,
-      };
-    });
+    let books = [];
+
+    if (!res.error) {
+      books = res.map(({ id, title, authors, imageLinks }) => {
+        return {
+          id,
+          title,
+          authors,
+          smallThumbnail: imageLinks.smallThumbnail,
+        };
+      });
+      setShowNoResultsMessage(false);
+    } else {
+      setShowNoResultsMessage(true);
+    }
 
     setSearchResults(books);
     setQuery(trimmedQuery);
@@ -44,5 +53,6 @@ export const useSearch = () => {
     search,
     closeSearch,
     openSearch,
+    showNoResultsMessage,
   };
 };
