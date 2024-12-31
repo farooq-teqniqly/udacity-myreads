@@ -1,63 +1,23 @@
 import "./App.css";
-import { useState } from "react";
 import { Bookshelf } from "./components/Bookshelf";
 import { SearchBook } from "./components/SearchBook";
 import { SearchResults } from "./components/SearchResults";
-import * as api from "./BooksAPI";
 import { SHELVES } from "./shelves";
 import { useShelves } from "./hooks/useShelves";
+import { useSearch } from "./hooks/useSearch";
 
 const App = () => {
-  const [showSearchPage, setShowSearchPage] = useState(false);
-  const [searchResults, setSearchResults] = useState([]);
-  const [query, setQuery] = useState("");
-
-  const handleSearchClose = () => {
-    setShowSearchPage(!showSearchPage);
-    setSearchResults([]);
-    setQuery("");
-  };
-
-  const handleSearch = async (q) => {
-    const trimmedQuery = q.trim();
-
-    if (trimmedQuery === query) {
-      return;
-    }
-
-    const res = await api.search(trimmedQuery);
-
-    const books = res.map(({ id, title, authors, imageLinks }) => {
-      return {
-        id,
-        title,
-        authors,
-        smallThumbnail: imageLinks.smallThumbnail,
-      };
-    });
-
-    setSearchResults(books);
-    setQuery(trimmedQuery);
-  };
-
   const { placeBook, getShelf } = useShelves();
 
-  const handleBookSelection = (selectedShelfId, selectedBook) => {
-    placeBook(selectedShelfId, selectedBook);
-  };
+  const { showSearchPage, searchResults, search, closeSearch, openSearch } =
+    useSearch();
 
   return (
     <div className="app">
       {showSearchPage ? (
         <div className="search-books">
-          <SearchBook
-            onClose={handleSearchClose}
-            onSearch={(q) => handleSearch(q)}
-          />
-          <SearchResults
-            results={searchResults}
-            onBookSelected={handleBookSelection}
-          />
+          <SearchBook onClose={closeSearch} onSearch={(q) => search(q)} />
+          <SearchResults results={searchResults} onBookSelected={placeBook} />
         </div>
       ) : (
         <div className="list-books">
@@ -72,13 +32,13 @@ const App = () => {
                   id={shelf.id}
                   label={shelf.label}
                   books={getShelf(shelf.id)}
-                  onBookSelected={handleBookSelection}
+                  onBookSelected={placeBook}
                 />
               ))}
             </div>
           </div>
           <div className="open-search">
-            <a onClick={() => setShowSearchPage(!showSearchPage)}>Add a book</a>
+            <a onClick={openSearch}>Add a book</a>
           </div>
         </div>
       )}
