@@ -130,3 +130,4 @@ dist
 
 .idea/
 fe/cypress/downloads
+fe/cypress/screenshots
