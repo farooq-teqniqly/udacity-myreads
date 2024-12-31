@@ -5,6 +5,7 @@ export const useSearch = () => {
   const [showSearchPage, setShowSearchPage] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [showNoResultsMessage, setShowNoResultsMessage] = useState(false);
+  const [apiError, setApiError] = useState(false);
   const [query, setQuery] = useState("");
 
   const openSearch = () => {
@@ -16,6 +17,7 @@ export const useSearch = () => {
     setSearchResults([]);
     setQuery("");
     setShowNoResultsMessage(false);
+    setApiError(false);
   };
 
   const search = async (searchTerm) => {
@@ -25,7 +27,16 @@ export const useSearch = () => {
       return;
     }
 
-    const res = await api.search(trimmedQuery);
+    let res;
+
+    try {
+      res = await api.search(trimmedQuery);
+      setApiError(false);
+      // eslint-disable-next-line no-unused-vars
+    } catch (_ignored) {
+      setApiError(true);
+      return;
+    }
 
     let books = [];
 
@@ -54,5 +65,6 @@ export const useSearch = () => {
     closeSearch,
     openSearch,
     showNoResultsMessage,
+    apiError,
   };
 };

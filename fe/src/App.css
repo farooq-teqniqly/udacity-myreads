@@ -114,6 +114,10 @@ body,
   padding: 80px 10px 20px;
 }
 
+.search-api-error {
+  padding: 80px 10px 20px;
+}
+
 /* books grid */
 
 .books-grid {

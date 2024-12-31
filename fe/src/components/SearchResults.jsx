@@ -5,12 +5,23 @@ export const SearchResults = ({
   results,
   onBookSelected,
   showNoResultsMessage,
+  showApiErrorMessage,
 }) => {
   {
     if (showNoResultsMessage) {
       return (
         <div className="search-no-results">
           <span>Your search yielded no results.</span>
+        </div>
+      );
+    }
+
+    if (showApiErrorMessage) {
+      return (
+        <div className="search-api-error">
+          <span>
+            There seems to be a problem with search. Try again in a few minutes.
+          </span>
         </div>
       );
     }
@@ -38,4 +49,5 @@ SearchResults.propTypes = {
   ).isRequired,
   onBookSelected: PropTypes.func.isRequired,
   showNoResultsMessage: PropTypes.bool.isRequired,
+  showApiErrorMessage: PropTypes.bool.isRequired,
 };
