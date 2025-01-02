@@ -1,14 +1,15 @@
 import * as bd from "../data/bookshelfData";
 
 export const useBookshelves = () => {
-  const getWantToReadBookshelf = () =>
-    bd.bookshelves.filter((d) => d.id === bd.BOOKSHELF_WANT_TO_READ)[0];
+  const getBookshelf = (bookshelfId) =>
+    bd.bookshelves.filter((d) => d.id === bookshelfId)[0];
+
+  const getWantToReadBookshelf = () => getBookshelf(bd.BOOKSHELF_WANT_TO_READ);
 
   const getCurrentlyReadingBookshelf = () =>
-    bd.bookshelves.filter((d) => d.id === bd.BOOKSHELF_CURRENTLY_READING)[0];
+    getBookshelf(bd.BOOKSHELF_CURRENTLY_READING);
 
-  const getAlreadyReadBookshelf = () =>
-    bd.bookshelves.filter((d) => d.id === bd.BOOKSHELF_ALREADY_READ)[0];
+  const getAlreadyReadBookshelf = () => getBookshelf(bd.BOOKSHELF_ALREADY_READ);
 
   return {
     getWantToReadBookshelf,
