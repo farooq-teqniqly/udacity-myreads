@@ -23,12 +23,12 @@ function App() {
       {showSearchPage ? (
         <div className="search-books">
           <div className="search-books-bar">
-            <a
-              className="close-search"
-              onClick={() => setShowSearchpage(!showSearchPage)}
-            >
-              Close
-            </a>
+            <Button
+              text="Close"
+              className={"close-search"}
+              onButtonClicked={() => setShowSearchpage(!showSearchPage)}
+            />
+
             <div className="search-books-input-wrapper">
               <input
                 type="text"
