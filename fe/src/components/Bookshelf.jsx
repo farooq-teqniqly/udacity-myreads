@@ -3,7 +3,7 @@ import { BookPropType, BookshelfPropType } from "../prop-types/propTypes";
 import { Book } from "./Book";
 import { bookshelves } from "../data/bookshelfData";
 
-export const Bookshelf = (books, bookshelf) => {
+export const Bookshelf = ({ books, bookshelf }) => {
   return (
     <div className="bookshelf">
       <h2 id={bookshelf.id} className="bookshelf-title">

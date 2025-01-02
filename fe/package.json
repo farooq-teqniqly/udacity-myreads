@@ -12,7 +12,8 @@
     "test:watch": "vitest",
     "test:ci": "vitest --run",
     "test:ui": "vitest --ui",
-    "e2e:ci": "npx cypress run --browser chrome --quiet"
+    "e2e:ci": "npx cypress run --browser chrome --quiet",
+    "e2e:ui": "npx cypress open"
   },
   "dependencies": {
     "form-serialize": "^0.7.2",

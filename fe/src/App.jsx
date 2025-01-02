@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Bookshelf } from "./components/Bookshelf";
 import * as bookshelfData from "./data/bookshelfData";
 import {
+  BOOKSHELF_ALREADY_READ,
   BOOKSHELF_CURRENTLY_READING,
   BOOKSHELF_WANT_TO_READ,
 } from "./data/bookshelfData";
@@ -41,23 +42,29 @@ function App() {
             <div>
               <Bookshelf
                 books={[]}
-                bookshelf={bookshelfData.bookshelves.filter(
-                  (d) => d.id === BOOKSHELF_WANT_TO_READ
-                )}
+                bookshelf={
+                  bookshelfData.bookshelves.filter(
+                    (d) => d.id === BOOKSHELF_WANT_TO_READ
+                  )[0]
+                }
               />
 
               <Bookshelf
                 books={[]}
-                bookshelf={bookshelfData.bookshelves.filter(
-                  (d) => d.id === BOOKSHELF_CURRENTLY_READING
-                )}
+                bookshelf={
+                  bookshelfData.bookshelves.filter(
+                    (d) => d.id === BOOKSHELF_CURRENTLY_READING
+                  )[0]
+                }
               />
 
               <Bookshelf
                 books={[]}
-                bookshelf={bookshelfData.bookshelves.filter(
-                  (d) => d.id === BOOKSHELF_CURRENTLY_READING
-                )}
+                bookshelf={
+                  bookshelfData.bookshelves.filter(
+                    (d) => d.id === BOOKSHELF_ALREADY_READ
+                  )[0]
+                }
               />
             </div>
           </div>
