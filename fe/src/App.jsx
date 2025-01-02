@@ -2,6 +2,7 @@ import "./App.css";
 import { useState } from "react";
 import { Bookshelf } from "./components/Bookshelf";
 import { useBookshelves } from "./hooks/useBookshelves";
+import { useBooks } from "./hooks/useBooks";
 
 function App() {
   const {
@@ -9,6 +10,9 @@ function App() {
     getCurrentlyReadingBookshelf,
     getAlreadyReadBookshelf,
   } = useBookshelves();
+
+  const { getWantToReadBooks, getCurrentlyReadingBooks, getAlreadyReadBooks } =
+    useBooks();
 
   const [showSearchPage, setShowSearchpage] = useState(false);
 
@@ -41,12 +45,18 @@ function App() {
           </div>
           <div className="list-books-content">
             <div>
-              <Bookshelf books={[]} bookshelf={getWantToReadBookshelf()} />
               <Bookshelf
-                books={[]}
+                books={getWantToReadBooks()}
+                bookshelf={getWantToReadBookshelf()}
+              />
+              <Bookshelf
+                books={getCurrentlyReadingBooks()}
                 bookshelf={getCurrentlyReadingBookshelf()}
               />
-              <Bookshelf books={[]} bookshelf={getAlreadyReadBookshelf()} />
+              <Bookshelf
+                books={getAlreadyReadBooks()}
+                bookshelf={getAlreadyReadBookshelf()}
+              />
             </div>
           </div>
           <div className="open-search">
