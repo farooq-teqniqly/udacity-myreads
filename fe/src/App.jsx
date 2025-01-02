@@ -4,6 +4,7 @@ import { Bookshelf } from "./components/Bookshelf";
 import { useBookshelves } from "./hooks/useBookshelves";
 import { useBooks } from "./hooks/useBooks";
 import { useLocalStorage } from "./hooks/useLocalStorage";
+import { Button } from "./components/Button";
 
 function App() {
   const {
@@ -61,7 +62,10 @@ function App() {
             </div>
           </div>
           <div className="open-search">
-            <a onClick={() => setShowSearchpage(!showSearchPage)}>Add a book</a>
+            <Button
+              text="Add a book"
+              onButtonClicked={() => setShowSearchpage(!showSearchPage)}
+            />
           </div>
         </div>
       )}
