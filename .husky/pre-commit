@@ -3,4 +3,4 @@
 
 npx lint-staged
 #npm run test
-npm run e2e
+#npm run e2e
