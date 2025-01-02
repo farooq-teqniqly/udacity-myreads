@@ -23,25 +23,3 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-
-Cypress.Commands.add("addBook", () => {
-  cy.get(".open-search a").should("be.visible").click();
-});
-
-Cypress.Commands.add("closeSearch", () => {
-  cy.get(".close-search").should("be.visible").click();
-});
-
-Cypress.Commands.add("search", (query) => {
-  cy.get("input").clear();
-  cy.get("input").type(query);
-  cy.get("#search-book-button").click();
-});
-
-Cypress.Commands.add("addBookToShelf", (bookIndex, shelfId) => {
-  cy.get(".book-title")
-    .eq(bookIndex)
-    .parent()
-    .find(".book-shelf-changer select")
-    .select(shelfId);
-});
