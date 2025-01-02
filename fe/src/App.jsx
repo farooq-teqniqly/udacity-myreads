@@ -1,14 +1,15 @@
 import "./App.css";
 import { useState } from "react";
 import { Bookshelf } from "./components/Bookshelf";
-import * as bookshelfData from "./data/bookshelfData";
-import {
-  BOOKSHELF_ALREADY_READ,
-  BOOKSHELF_CURRENTLY_READING,
-  BOOKSHELF_WANT_TO_READ,
-} from "./data/bookshelfData";
+import { useBookshelves } from "./hooks/useBookshelves";
 
 function App() {
+  const {
+    getWantToReadBookshelf,
+    getCurrentlyReadingBookshelf,
+    getAlreadyReadBookshelf,
+  } = useBookshelves();
+
   const [showSearchPage, setShowSearchpage] = useState(false);
 
   return (
@@ -40,32 +41,12 @@ function App() {
           </div>
           <div className="list-books-content">
             <div>
+              <Bookshelf books={[]} bookshelf={getWantToReadBookshelf()} />
               <Bookshelf
                 books={[]}
-                bookshelf={
-                  bookshelfData.bookshelves.filter(
-                    (d) => d.id === BOOKSHELF_WANT_TO_READ
-                  )[0]
-                }
+                bookshelf={getCurrentlyReadingBookshelf()}
               />
-
-              <Bookshelf
-                books={[]}
-                bookshelf={
-                  bookshelfData.bookshelves.filter(
-                    (d) => d.id === BOOKSHELF_CURRENTLY_READING
-                  )[0]
-                }
-              />
-
-              <Bookshelf
-                books={[]}
-                bookshelf={
-                  bookshelfData.bookshelves.filter(
-                    (d) => d.id === BOOKSHELF_ALREADY_READ
-                  )[0]
-                }
-              />
+              <Bookshelf books={[]} bookshelf={getAlreadyReadBookshelf()} />
             </div>
           </div>
           <div className="open-search">
