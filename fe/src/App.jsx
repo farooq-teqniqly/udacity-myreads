@@ -4,6 +4,8 @@ import { Bookshelf } from "./components/Bookshelf";
 import { useBookshelves } from "./hooks/useBookshelves";
 import { useBooks } from "./hooks/useBooks";
 import { useLocalStorage } from "./hooks/useLocalStorage";
+// import { useBookSearch } from "./hooks/useBookSearch";
+// import { useAPI } from "./hooks/useAPI";
 import { Button } from "./components/Button";
 
 function App() {
@@ -15,6 +17,8 @@ function App() {
 
   const { getWantToReadBooks, getCurrentlyReadingBooks, getAlreadyReadBooks } =
     useBooks(useLocalStorage());
+
+  // const { search: bookSearch, searchError, resultCount, searchResults } = useBookSearch(useAPI());
 
   const [showSearchPage, setShowSearchpage] = useState(false);
 
