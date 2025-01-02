@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import { useLocalStorage } from "./useLocalStorage";
 import {
   BOOKSHELF_WANT_TO_READ,
   BOOKSHELF_CURRENTLY_READING,
@@ -7,17 +6,18 @@ import {
   BOOKSHELF_NONE,
 } from "../data/bookshelfData";
 
-export const useBooks = () => {
-  const { loadBooks: loadFromLocalStorage, saveBooks: saveToLocalStorage } =
-    useLocalStorage();
+export const useBooks = (bookRepository) => {
+  if (!bookRepository) {
+    throw new Error("provide a book repository to the useBooks hook");
+  }
 
-  const loadBooks = () => loadFromLocalStorage();
+  const loadBooks = () => bookRepository.loadBooks();
 
   const [books] = useState(() => loadBooks());
 
   const saveBooks = useCallback(
-    () => saveToLocalStorage(books),
-    [books, saveToLocalStorage]
+    () => bookRepository.saveBooks(books),
+    [books, bookRepository]
   );
 
   useEffect(() => {

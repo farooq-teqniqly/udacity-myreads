@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Bookshelf } from "./components/Bookshelf";
 import { useBookshelves } from "./hooks/useBookshelves";
 import { useBooks } from "./hooks/useBooks";
+import { useLocalStorage } from "./hooks/useLocalStorage";
 
 function App() {
   const {
@@ -12,7 +13,7 @@ function App() {
   } = useBookshelves();
 
   const { getWantToReadBooks, getCurrentlyReadingBooks, getAlreadyReadBooks } =
-    useBooks();
+    useBooks(useLocalStorage());
 
   const [showSearchPage, setShowSearchpage] = useState(false);
 
