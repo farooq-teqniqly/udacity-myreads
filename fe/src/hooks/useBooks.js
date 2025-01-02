@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { useLocalStorage } from "./useLocalStorage";
 import {
   BOOKSHELF_WANT_TO_READ,
   BOOKSHELF_CURRENTLY_READING,
@@ -6,17 +7,17 @@ import {
   BOOKSHELF_NONE,
 } from "../data/bookshelfData";
 
-const LOCAL_STORAGE_KEY = "myreads-books";
-
 export const useBooks = () => {
-  const loadBooks = () =>
-    JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [];
+  const { loadBooks: loadFromLocalStorage, saveBooks: saveToLocalStorage } =
+    useLocalStorage();
+
+  const loadBooks = () => loadFromLocalStorage();
 
   const [books] = useState(() => loadBooks());
 
   const saveBooks = useCallback(
-    () => localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(books)),
-    [books]
+    () => saveToLocalStorage(books),
+    [books, saveToLocalStorage]
   );
 
   useEffect(() => {
