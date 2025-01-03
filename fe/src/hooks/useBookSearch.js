@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BOOKSHELF_NONE } from "../data/bookshelfData";
+import { useBookshelves } from "./useBookshelves";
 
 export const useBookSearch = (useAPI) => {
   if (!useAPI) {
@@ -9,6 +9,7 @@ export const useBookSearch = (useAPI) => {
   const [searchError, setSearchError] = useState(false);
   const [resultCount, setResultCount] = useState(0);
   const [searchResults, setSearchResults] = useState([]);
+  const { BOOKSHELF_NONE } = useBookshelves();
 
   const search = async (searchTerm) => {
     if (!searchTerm) {

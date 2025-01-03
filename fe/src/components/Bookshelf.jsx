@@ -1,9 +1,11 @@
 import PropTypes from "prop-types";
 import { BookPropType, BookshelfPropType } from "../prop-types/propTypes";
 import { Book } from "./Book";
-import { bookshelves } from "../data/bookshelfData";
+import { useBookshelves } from "../hooks/useBookshelves";
 
 export const Bookshelf = ({ books, bookshelf }) => {
+  const { bookshelves } = useBookshelves();
+
   return (
     <div className="bookshelf">
       <h2 id={bookshelf.id} className="bookshelf-title">

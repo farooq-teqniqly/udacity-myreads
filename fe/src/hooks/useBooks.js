@@ -1,10 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import {
-  BOOKSHELF_WANT_TO_READ,
-  BOOKSHELF_CURRENTLY_READING,
-  BOOKSHELF_ALREADY_READ,
-  BOOKSHELF_NONE,
-} from "../data/bookshelfData";
+import { useBookshelves } from "./useBookshelves";
 
 export const useBooks = (bookRepository) => {
   if (!bookRepository) {
@@ -23,6 +18,13 @@ export const useBooks = (bookRepository) => {
   useEffect(() => {
     saveBooks();
   }, [saveBooks]);
+
+  const {
+    BOOKSHELF_WANT_TO_READ,
+    BOOKSHELF_CURRENTLY_READING,
+    BOOKSHELF_ALREADY_READ,
+    BOOKSHELF_NONE,
+  } = useBookshelves();
 
   const getBooksForShelf = (bookshelfId) =>
     books.filter((book) => book.bookshelfId === bookshelfId);

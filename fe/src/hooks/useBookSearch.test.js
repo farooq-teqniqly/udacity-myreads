@@ -1,9 +1,10 @@
 import { act, renderHook } from "@testing-library/react";
 import { useBookSearch } from "./useBookSearch";
-import { BOOKSHELF_NONE } from "../data/bookshelfData";
+import { useBookshelves } from "./useBookshelves";
 
 describe("useBookSearch hook", () => {
   const mockUseAPI = { search: vi.fn() };
+  const { BOOKSHELF_NONE } = useBookshelves();
 
   it("should throw an error when useAPI hook not provider", () => {
     expect(() => renderHook(() => useBookSearch())).toThrow(

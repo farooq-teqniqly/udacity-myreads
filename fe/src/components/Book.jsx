@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { BookPropType, BookshelfPropType } from "../prop-types/propTypes";
-import { BOOKSHELF_NONE } from "../data/bookshelfData";
 import PropTypes from "prop-types";
+import { useBookshelves } from "../hooks/useBookshelves";
 
 export const Book = ({ book, bookshelves, onShelfChanged }) => {
+  const { BOOKSHELF_NONE } = useBookshelves();
   const [selectedShelf, setSelectedShelf] = useState(BOOKSHELF_NONE);
   const { id, title, authors, imageUrl, bookshelfId } = book;
 

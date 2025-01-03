@@ -1,4 +1,4 @@
-import { bookshelves, BOOKSHELF_NONE } from "../../src/data/bookshelfData";
+import { useBookshelves } from "../../src/hooks/useBookshelves";
 
 describe("Home Page tests", () => {
   beforeEach(() => {
@@ -6,6 +6,8 @@ describe("Home Page tests", () => {
   });
 
   it("displays the bookshelves", () => {
+    const { bookshelves, BOOKSHELF_NONE } = useBookshelves();
+
     bookshelves.forEach((bookshelf) => {
       if (bookshelf.id !== BOOKSHELF_NONE) {
         const idSelector = `#${bookshelf.id}`;
