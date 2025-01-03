@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 
 export const useDebounce = (value, delay) => {
-  if (!value) {
+  if (typeof value === "undefined") {
+    throw new Error("value not provided");
+  }
+
+  if (value === null) {
     throw new Error("value not provided");
   }
 
@@ -9,7 +13,7 @@ export const useDebounce = (value, delay) => {
     throw new Error("delay must be a number greater than zero");
   }
 
-  if (value < 1) {
+  if (delay < 1) {
     throw new Error("delay must be a number greater than zero");
   }
 

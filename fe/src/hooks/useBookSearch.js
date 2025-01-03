@@ -23,7 +23,7 @@ export const useBookSearch = (useAPI) => {
       return;
     }
 
-    const books = result.map(({ id, title, authors, imageLinks }) => {
+    const books = result.books.map(({ id, title, authors, imageLinks }) => {
       return {
         id,
         title,

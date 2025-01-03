@@ -59,7 +59,7 @@ describe("useBookSearch hook", () => {
       },
     ];
 
-    mockUseAPI.search.mockResolvedValue(mockBooks);
+    mockUseAPI.search.mockResolvedValue({ books: mockBooks });
     const { result } = renderHook(() => useBookSearch(mockUseAPI));
 
     await act(async () => {
@@ -113,8 +113,8 @@ describe("useBookSearch hook", () => {
     ];
 
     mockUseAPI.search
-      .mockResolvedValueOnce(mockBooks1)
-      .mockResolvedValueOnce(mockBooks2);
+      .mockResolvedValueOnce({ books: mockBooks1 })
+      .mockResolvedValueOnce({ books: mockBooks2 });
 
     const { result } = renderHook(() => useBookSearch(mockUseAPI));
 

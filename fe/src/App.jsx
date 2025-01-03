@@ -7,6 +7,7 @@ import { useLocalStorage } from "./hooks/useLocalStorage";
 // import { useBookSearch } from "./hooks/useBookSearch";
 // import { useAPI } from "./hooks/useAPI";
 import { Button } from "./components/Button";
+import { Search } from "./components/Search";
 
 function App() {
   const {
@@ -18,28 +19,13 @@ function App() {
   const { getWantToReadBooks, getCurrentlyReadingBooks, getAlreadyReadBooks } =
     useBooks(useLocalStorage());
 
-  // const { search: bookSearch, searchError, resultCount, searchResults } = useBookSearch(useAPI());
-
   const [showSearchPage, setShowSearchpage] = useState(false);
 
   return (
     <div className="app">
       {showSearchPage ? (
         <div className="search-books">
-          <div className="search-books-bar">
-            <Button
-              text="Close"
-              className={"close-search"}
-              onButtonClicked={() => setShowSearchpage(!showSearchPage)}
-            />
-
-            <div className="search-books-input-wrapper">
-              <input
-                type="text"
-                placeholder="Search by title, author, or ISBN"
-              />
-            </div>
-          </div>
+          <Search onClose={() => setShowSearchpage(false)} />
           <div className="search-books-results">
             <ol className="books-grid"></ol>
           </div>
@@ -68,7 +54,7 @@ function App() {
           <div className="open-search">
             <Button
               text="Add a book"
-              onButtonClicked={() => setShowSearchpage(!showSearchPage)}
+              onButtonClicked={() => setShowSearchpage(true)}
             />
           </div>
         </div>

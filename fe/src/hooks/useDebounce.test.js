@@ -3,6 +3,12 @@ import { useDebounce } from "./useDebounce";
 
 describe("useDebounce hook", () => {
   it("should throw an error when value not provided", () => {
+    expect(() => renderHook(() => useDebounce(undefined, 1000))).toThrow(
+      "value not provided"
+    );
+  });
+
+  it("should throw an error when value is null", () => {
     expect(() => renderHook(() => useDebounce(null, 1000))).toThrow(
       "value not provided"
     );
@@ -28,6 +34,12 @@ describe("useDebounce hook", () => {
     const { result } = renderHook(() => useDebounce("value", 1000));
 
     expect(result.current.debouncedValue).toBe("value");
+  });
+
+  it("accepts an empty string value for initial state", () => {
+    const { result } = renderHook(() => useDebounce("", 1000));
+
+    expect(result.current.debouncedValue).toBe("");
   });
 
   it("should update debounced value after the delay", async () => {
