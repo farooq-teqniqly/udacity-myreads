@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useBookshelves } from "./useBookshelves";
 
 export const useBookSearch = (useAPI) => {
@@ -11,32 +11,35 @@ export const useBookSearch = (useAPI) => {
   const [searchResults, setSearchResults] = useState([]);
   const { BOOKSHELF_NONE } = useBookshelves();
 
-  const search = async (searchTerm) => {
-    if (!searchTerm) {
-      throw new Error("searchTerm not provided");
-    }
+  const search = useCallback(
+    async (searchTerm) => {
+      if (!searchTerm) {
+        throw new Error("searchTerm not provided");
+      }
 
-    const result = await useAPI.search(searchTerm);
+      const result = await useAPI.search(searchTerm);
 
-    if (result.error) {
-      setSearchError(true);
-      return;
-    }
+      if (result.error) {
+        setSearchError(true);
+        return;
+      }
 
-    const books = result.books.map(({ id, title, authors, imageLinks }) => {
-      return {
-        id,
-        title,
-        authors,
-        imageUrl: imageLinks.smallThumbnail,
-        bookshelfId: BOOKSHELF_NONE,
-      };
-    });
+      const books = result.books.map(({ id, title, authors, imageLinks }) => {
+        return {
+          id,
+          title,
+          authors,
+          imageUrl: imageLinks?.smallThumbnail,
+          bookshelfId: BOOKSHELF_NONE,
+        };
+      });
 
-    setResultCount(books.length);
-    setSearchResults(books);
-    setSearchError(false);
-  };
+      setResultCount(books.length);
+      setSearchResults(books);
+      setSearchError(false);
+    },
+    [useAPI, BOOKSHELF_NONE]
+  );
 
   return {
     search,
