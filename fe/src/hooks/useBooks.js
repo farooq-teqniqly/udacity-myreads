@@ -24,24 +24,28 @@ export const useBooks = (bookRepository) => {
     BOOKSHELF_CURRENTLY_READING,
     BOOKSHELF_ALREADY_READ,
     BOOKSHELF_NONE,
+    isValidBookshelf,
   } = useBookshelves();
 
-  const getBooksForShelf = (bookshelfId) =>
-    books.filter((book) => book.bookshelfId === bookshelfId);
+  const getBooksForShelf = (bookshelfId) => {
+    if (!isValidBookshelf(bookshelfId)) {
+      throw new Error(`invalid bookshelf id: ${bookshelfId}`);
+    }
 
-  const getWantToReadBooks = () => getBooksForShelf(BOOKSHELF_WANT_TO_READ);
+    return books.filter((book) => book.bookshelfId === bookshelfId);
+  };
 
-  const getCurrentlyReadingBooks = () =>
-    getBooksForShelf(BOOKSHELF_CURRENTLY_READING);
-
-  const getAlreadyReadBooks = () => getBooksForShelf(BOOKSHELF_ALREADY_READ);
-
-  const getNoneBookshelfBooks = () => getBooksForShelf(BOOKSHELF_NONE);
+  const bookFunctions = {
+    wantToRead: () => getBooksForShelf(BOOKSHELF_WANT_TO_READ),
+    currentlyReading: () => getBooksForShelf(BOOKSHELF_CURRENTLY_READING),
+    alreadyRead: () => getBooksForShelf(BOOKSHELF_ALREADY_READ),
+    none: () => getBooksForShelf(BOOKSHELF_NONE),
+  };
 
   return {
-    getWantToReadBooks,
-    getCurrentlyReadingBooks,
-    getAlreadyReadBooks,
-    getNoneBookshelfBooks,
+    getWantToReadBooks: bookFunctions.wantToRead,
+    getCurrentlyReadingBooks: bookFunctions.currentlyReading,
+    getAlreadyReadBooks: bookFunctions.alreadyRead,
+    getNoneBookshelfBooks: bookFunctions.none,
   };
 };
