@@ -22,7 +22,7 @@ const bookshelves = [
   },
 ];
 
-export const isValidBookshelf = (bookshelfId) => {
+const isValidBookshelf = (bookshelfId) => {
   return [
     BOOKSHELF_WANT_TO_READ,
     BOOKSHELF_CURRENTLY_READING,
@@ -55,5 +55,6 @@ export const useBookshelves = () => {
     BOOKSHELF_ALREADY_READ,
     BOOKSHELF_NONE,
     bookshelves,
+    isValidBookshelf,
   };
 };
