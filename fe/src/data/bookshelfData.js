@@ -21,12 +21,3 @@ export const bookshelves = [
     title: "None",
   },
 ];
-
-export const isValidBookshelf = (bookshelfId) => {
-  return [
-    BOOKSHELF_WANT_TO_READ,
-    BOOKSHELF_CURRENTLY_READING,
-    BOOKSHELF_ALREADY_READ,
-    BOOKSHELF_NONE,
-  ].includes(bookshelfId);
-};
