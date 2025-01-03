@@ -1,7 +1,8 @@
+import { useCallback, useMemo } from "react";
 import * as API from "../BooksAPI";
 
 export const useAPI = () => {
-  const search = async (searchTerm) => {
+  const search = useCallback(async (searchTerm) => {
     try {
       const res = await API.search(searchTerm.trim());
 
@@ -19,9 +20,7 @@ export const useAPI = () => {
         error: err.message,
       };
     }
-  };
+  }, []);
 
-  return {
-    search,
-  };
+  return useMemo(() => ({ search }), [search]);
 };
