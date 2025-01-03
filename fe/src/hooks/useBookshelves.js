@@ -40,17 +40,16 @@ export const useBookshelves = () => {
     return bookshelves.filter((d) => d.id === bookshelfId)[0];
   };
 
-  const getWantToReadBookshelf = () => getBookshelf(BOOKSHELF_WANT_TO_READ);
-
-  const getCurrentlyReadingBookshelf = () =>
-    getBookshelf(BOOKSHELF_CURRENTLY_READING);
-
-  const getAlreadyReadBookshelf = () => getBookshelf(BOOKSHELF_ALREADY_READ);
+  const bookshelfFunctions = {
+    wantToRead: () => getBookshelf(BOOKSHELF_WANT_TO_READ),
+    currentlyReading: () => getBookshelf(BOOKSHELF_CURRENTLY_READING),
+    alreadyRead: () => getBookshelf(BOOKSHELF_ALREADY_READ),
+  };
 
   return {
-    getWantToReadBookshelf,
-    getCurrentlyReadingBookshelf,
-    getAlreadyReadBookshelf,
+    getWantToReadBookshelf: bookshelfFunctions.wantToRead,
+    getCurrentlyReadingBookshelf: bookshelfFunctions.currentlyReading,
+    getAlreadyReadBookshelf: bookshelfFunctions.alreadyRead,
     BOOKSHELF_WANT_TO_READ,
     BOOKSHELF_CURRENTLY_READING,
     BOOKSHELF_ALREADY_READ,
