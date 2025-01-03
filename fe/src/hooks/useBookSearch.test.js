@@ -26,7 +26,7 @@ describe("useBookSearch hook", () => {
     const { result } = renderHook(() => useBookSearch(mockUseAPI));
 
     expect(result.current.searchError).toBe(false);
-    expect(result.current.resultCount).toBe(0);
+    expect(result.current.resultCount).toBe(null);
     expect(result.current.searchResults).toEqual([]);
   });
 
@@ -39,7 +39,7 @@ describe("useBookSearch hook", () => {
     });
 
     expect(result.current.searchError).toBe(true);
-    expect(result.current.resultCount).toBe(0);
+    expect(result.current.resultCount).toBe(null);
     expect(result.current.searchResults).toEqual([]);
   });
 
@@ -85,6 +85,20 @@ describe("useBookSearch hook", () => {
         bookshelfId: BOOKSHELF_NONE,
       },
     ]);
+  });
+
+  it("sets the state correctly when no results", async () => {
+    const mockBooks = [];
+
+    mockUseAPI.search.mockResolvedValue({ books: mockBooks });
+    const { result } = renderHook(() => useBookSearch(mockUseAPI));
+
+    await act(async () => {
+      await result.current.search("history");
+    });
+
+    expect(result.current.searchError).toBe(false);
+    expect(result.current.resultCount).toBe(mockBooks.length);
   });
 
   it("should update the state correctly for multiple calls", async () => {

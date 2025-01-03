@@ -7,7 +7,7 @@ export const useBookSearch = (useAPI) => {
   }
 
   const [searchError, setSearchError] = useState(false);
-  const [resultCount, setResultCount] = useState(0);
+  const [resultCount, setResultCount] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
   const { BOOKSHELF_NONE } = useBookshelves();
 
@@ -25,6 +25,10 @@ export const useBookSearch = (useAPI) => {
       }
 
       const books = result.books.map(({ id, title, authors, imageLinks }) => {
+        if (!authors) {
+          authors = ["No authors listed"];
+        }
+
         return {
           id,
           title,

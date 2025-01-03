@@ -9,12 +9,14 @@ import { Search } from "./components/Search";
 import { useDebounce } from "./hooks/useDebounce";
 import { useBookSearch } from "./hooks/useBookSearch";
 import { useAPI } from "./hooks/useAPI";
+import { SearchResults } from "./components/SearchResults";
 
 function App() {
   const {
     getWantToReadBookshelf,
     getCurrentlyReadingBookshelf,
     getAlreadyReadBookshelf,
+    bookshelves,
   } = useBookshelves();
 
   const { getWantToReadBooks, getCurrentlyReadingBooks, getAlreadyReadBooks } =
@@ -24,7 +26,7 @@ function App() {
 
   const [searchTerm, setSearchTerm] = useState("");
   const { debouncedValue: debouncedSearchTerm } = useDebounce(searchTerm, 1000);
-  const { search } = useBookSearch(useAPI());
+  const { search, searchResults, resultCount } = useBookSearch(useAPI());
 
   useEffect(() => {
     const debouncedSearch = async () => {
@@ -45,7 +47,12 @@ function App() {
             onSearchTermChanged={(term) => setSearchTerm(term)}
           />
           <div className="search-books-results">
-            <ol className="books-grid"></ol>
+            <SearchResults
+              books={searchResults}
+              bookshelves={bookshelves}
+              resultCount={resultCount}
+              onShelfChanged={() => {}}
+            />
           </div>
         </div>
       ) : (

@@ -6,7 +6,7 @@ import { useBookshelves } from "../hooks/useBookshelves";
 export const Book = ({ book, bookshelves, onShelfChanged }) => {
   const { BOOKSHELF_NONE } = useBookshelves();
   const [selectedShelf, setSelectedShelf] = useState(BOOKSHELF_NONE);
-  const { id, title, authors, imageUrl, bookshelfId } = book;
+  const { id, title, authors, imageUrl } = book;
 
   const handleShelfChange = (newShelfId, bookId) => {
     setSelectedShelf(newShelfId);
@@ -37,7 +37,7 @@ export const Book = ({ book, bookshelves, onShelfChanged }) => {
             </option>
             {bookshelves.map((bookshelf) => (
               <option key={bookshelf.id} id={bookshelf.id} value={bookshelf.id}>
-                {bookshelf.title} {selectedShelf === bookshelfId ? "✓" : ""}
+                {bookshelf.title} {selectedShelf === bookshelf.id ? "✓" : ""}
               </option>
             ))}
           </select>

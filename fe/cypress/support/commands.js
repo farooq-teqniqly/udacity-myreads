@@ -31,3 +31,15 @@ Cypress.Commands.add("openSearch", () => {
 Cypress.Commands.add("closeSearch", () => {
   cy.get(".close-search").click();
 });
+
+Cypress.Commands.add("searchFor", (searchTerm) => {
+  cy.get(".search-books-input-wrapper input").type(searchTerm);
+});
+
+Cypress.Commands.add("clearSearch", () => {
+  cy.get(".search-books-input-wrapper input").clear();
+});
+
+Cypress.Commands.add("getBookByTitle", (title) => {
+  cy.get(".book").contains(".book-title", title).closest(".book");
+});
