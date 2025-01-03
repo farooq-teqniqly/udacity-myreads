@@ -11,6 +11,10 @@ export const useBookSearch = (useAPI) => {
   const [searchResults, setSearchResults] = useState([]);
 
   const search = async (searchTerm) => {
+    if (!searchTerm) {
+      throw new Error("searchTerm not provided");
+    }
+
     const result = await useAPI.search(searchTerm);
 
     if (result.error) {

@@ -11,6 +11,16 @@ describe("useBookSearch hook", () => {
     );
   });
 
+  it("should throw error when search term not provided", async () => {
+    const { result } = renderHook(() => useBookSearch(mockUseAPI));
+
+    await expect(async () => {
+      await act(async () => {
+        await result.current.search();
+      });
+    }).rejects.toThrow("searchTerm not provided");
+  });
+
   it("initializes with the correct default state", () => {
     const { result } = renderHook(() => useBookSearch(mockUseAPI));
 
