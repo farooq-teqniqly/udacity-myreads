@@ -52,7 +52,13 @@ export default [
         "warn",
         { allowConstantExport: true },
       ],
-      "prettier/prettier": "warn",
+      "prettier/prettier": [
+        "warn",
+        {
+          endOfLine: "auto",
+        },
+      ],
+
       ...cypress.configs.recommended.rules,
     },
   },
