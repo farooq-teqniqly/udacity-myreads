@@ -23,23 +23,3 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-
-Cypress.Commands.add("openSearch", () => {
-  cy.get(".open-search a").click();
-});
-
-Cypress.Commands.add("closeSearch", () => {
-  cy.get(".close-search").click();
-});
-
-Cypress.Commands.add("searchFor", (searchTerm) => {
-  cy.get(".search-books-input-wrapper input").type(searchTerm);
-});
-
-Cypress.Commands.add("clearSearch", () => {
-  cy.get(".search-books-input-wrapper input").clear();
-});
-
-Cypress.Commands.add("getBookByTitle", (title) => {
-  cy.get(".book").contains(".book-title", title).closest(".book");
-});
