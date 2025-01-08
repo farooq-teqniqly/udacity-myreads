@@ -24,7 +24,7 @@ describe("shelves view", () => {
   });
 
   it("opens search view when search button is clicked", () => {
-    cy.get(".open-search").click();
+    cy.openSearch();
     cy.get(".search-books-input-wrapper input").should("be.visible");
   });
 });
