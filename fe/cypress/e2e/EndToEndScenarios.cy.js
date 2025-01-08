@@ -64,6 +64,10 @@ describe("end-to-end scenarios", () => {
         if (index !== 0) {
           cy.selectBookByTitle(title).addToShelf(shelf);
 
+          cy.selectBookByTitle(title)
+            .get("option")
+            .should("contain.text", `${shelf} ✓`);
+
           cy.getBookshelf(shelf)
             .find(".books-grid li")
             .should("have.length", 1);
@@ -83,7 +87,7 @@ describe("end-to-end scenarios", () => {
       cy.doSearch(query);
       cy.selectBookByTitle(title).addToShelf(shelves[0]);
       cy.closeSearch();
-      cy.selectBookByTitle(title).addToShelf("None ✓");
+      cy.selectBookByTitle(title).addToShelf("None");
 
       shelves.forEach((shelf) => {
         cy.getBookshelf(shelf).find(".books-grid li").should("not.exist");

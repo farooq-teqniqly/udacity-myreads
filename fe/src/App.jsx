@@ -72,6 +72,8 @@ const App = () => {
   }, [debouncedQuery, shelves]);
 
   const onShelfChanged = (book, newShelf) => {
+    book.currentShelf = newShelf;
+
     const updatedShelves = {
       wantToRead: shelves.wantToRead.filter((b) => b.id !== book.id),
       currentlyReading: shelves.currentlyReading.filter(
