@@ -1,6 +1,13 @@
 import PropTypes from "prop-types";
+import { Book } from "./Book";
+import { BookPropType } from "../propTypes";
 
-export const Search = ({ onClosed }) => {
+export const Search = ({
+  onClosed,
+  onQueryChanged,
+  searchResults,
+  onShelfChanged,
+}) => {
   return (
     <div className="search-books">
       <div className="search-books-bar">
@@ -8,11 +15,21 @@ export const Search = ({ onClosed }) => {
           Close
         </a>
         <div className="search-books-input-wrapper">
-          <input type="text" placeholder="Search by title, author, or ISBN" />
+          <input
+            type="text"
+            placeholder="Search by title, author, or ISBN"
+            onChange={(e) => onQueryChanged(e.target.value)}
+          />
         </div>
       </div>
       <div className="search-books-results">
-        <ol className="books-grid"></ol>
+        <ol className="books-grid">
+          {searchResults.map((book, index) => (
+            <li key={index}>
+              <Book book={book} onShelfChanged={onShelfChanged} />
+            </li>
+          ))}
+        </ol>
       </div>
     </div>
   );
@@ -20,4 +37,7 @@ export const Search = ({ onClosed }) => {
 
 Search.propTypes = {
   onClosed: PropTypes.func.isRequired,
+  onQueryChanged: PropTypes.func.isRequired,
+  onShelfChanged: PropTypes.func.isRequired,
+  searchResults: PropTypes.arrayOf(BookPropType),
 };

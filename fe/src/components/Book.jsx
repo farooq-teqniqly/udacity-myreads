@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { BookPropType } from "../propTypes";
 
 export const Book = ({ book, onShelfChanged }) => {
   const { imageUrl, title, authors, currentShelf } = book;
@@ -22,10 +23,18 @@ export const Book = ({ book, onShelfChanged }) => {
             <option value="moveTo" disabled>
               Move to...
             </option>
-            <option value="currentlyReading">Currently Reading</option>
-            <option value="wantToRead">Want to Read</option>
-            <option value="alreadyRead">Already Read</option>
-            <option value="none">None</option>
+            <option value="currentlyReading">
+              Currently Reading{currentShelf === "currentlyReading" ? " ✓" : ""}
+            </option>
+            <option value="wantToRead">
+              Want to Read{currentShelf === "wantToRead" ? " ✓" : ""}
+            </option>
+            <option value="alreadyRead">
+              Already Read{currentShelf === "alreadyRead" ? " ✓" : ""}
+            </option>
+            <option value="none">
+              None{currentShelf === "none" || !currentShelf ? " ✓" : ""}
+            </option>
           </select>
         </div>
       </div>
@@ -36,12 +45,6 @@ export const Book = ({ book, onShelfChanged }) => {
 };
 
 Book.propTypes = {
-  book: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    authors: PropTypes.arrayOf(PropTypes.string),
-    imageUrl: PropTypes.string,
-    currentShelf: PropTypes.string,
-  }).isRequired,
+  book: BookPropType,
   onShelfChanged: PropTypes.func.isRequired,
 };

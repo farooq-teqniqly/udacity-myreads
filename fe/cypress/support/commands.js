@@ -26,3 +26,15 @@
 Cypress.Commands.add("openSearch", () => {
   cy.get(".open-search a").click();
 });
+
+Cypress.Commands.add("doSearch", (query) => {
+  cy.get(".search-books-input-wrapper input").type(query);
+});
+
+Cypress.Commands.add("clearSearch", () => {
+  cy.get(".search-books-input-wrapper input").clear();
+});
+
+Cypress.Commands.add("closeSearch", () => {
+  cy.get(".close-search").click();
+});

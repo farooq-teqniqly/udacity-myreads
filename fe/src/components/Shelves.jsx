@@ -1,30 +1,11 @@
-import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { Book } from "./Book";
+import { BookPropType } from "../propTypes";
 
-export const Shelves = () => {
-  const [shelves, setShelves] = useState({
-    wantToRead: [],
-    currentlyReading: [],
-    alreadyRead: [],
-  });
-
-  useEffect(() => {
-    const savedShelves = JSON.parse(localStorage.getItem("shelves")) || {
-      wantToRead: [],
-      currentlyReading: [],
-      alreadyRead: [],
-    };
-
-    setShelves(savedShelves);
-  }, []);
-
+export const Shelves = ({ shelves, onShelfChanged }) => {
   const makeFriendlyShelfName = (shelfName) => {
     let friendlyName = shelfName.replace(/([A-Z])/g, " $1").trim();
     return friendlyName[0].toUpperCase() + friendlyName.slice(1);
-  };
-
-  const onShelfChanged = (book, newShelf) => {
-    console.log({ book, newShelf });
   };
 
   return (
@@ -45,4 +26,13 @@ export const Shelves = () => {
       ))}
     </>
   );
+};
+
+Shelves.propTypes = {
+  shelves: PropTypes.shape({
+    wantToRead: PropTypes.arrayOf(BookPropType),
+    currentlyReading: PropTypes.arrayOf(BookPropType),
+    alreadyRead: PropTypes.arrayOf(BookPropType),
+  }).isRequired,
+  onShelfChanged: PropTypes.func.isRequired,
 };
