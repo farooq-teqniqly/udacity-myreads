@@ -72,7 +72,20 @@ const App = () => {
   }, [debouncedQuery, shelves]);
 
   const onShelfChanged = (book, newShelf) => {
-    console.log({ book, newShelf });
+    const updatedShelves = {
+      wantToRead: shelves.wantToRead.filter((b) => b.id !== book.id),
+      currentlyReading: shelves.currentlyReading.filter(
+        (b) => b.id !== book.id
+      ),
+      alreadyRead: shelves.alreadyRead.filter((b) => b.id !== book.id),
+    };
+
+    if (newShelf !== "none") {
+      updatedShelves[newShelf] = [...updatedShelves[newShelf], book];
+    }
+
+    setShelves(updatedShelves);
+    localStorage.setItem("shelves", JSON.stringify(updatedShelves));
   };
 
   const onSearchClosed = () => {

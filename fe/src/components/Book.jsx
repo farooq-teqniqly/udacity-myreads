@@ -27,7 +27,7 @@ export const Book = ({ book, onShelfChanged }) => {
               Currently Reading{currentShelf === "currentlyReading" ? " ✓" : ""}
             </option>
             <option value="wantToRead">
-              Want to Read{currentShelf === "wantToRead" ? " ✓" : ""}
+              Want To Read{currentShelf === "wantToRead" ? " ✓" : ""}
             </option>
             <option value="alreadyRead">
               Already Read{currentShelf === "alreadyRead" ? " ✓" : ""}

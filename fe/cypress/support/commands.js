@@ -49,3 +49,14 @@ Cypress.Commands.add("selectBookByTitle", (title) => {
 Cypress.Commands.add("verifyBookAuthors", (authors) => {
   cy.get("@selectedBook").find(".book-authors").should("have.text", authors);
 });
+
+Cypress.Commands.add("addToShelf", (shelf) => {
+  cy.get("@selectedBook").find("select").select(shelf);
+});
+
+Cypress.Commands.add("getBookshelf", (shelf) => {
+  cy.get(".bookshelf")
+    .contains(".bookshelf-title", shelf)
+    .closest(".bookshelf")
+    .as("bookshelfBooks");
+});

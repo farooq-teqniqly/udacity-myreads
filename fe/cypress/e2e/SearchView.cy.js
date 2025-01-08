@@ -36,7 +36,7 @@ describe("Search view", () => {
     const expectedOptions = [
       "Move to...",
       "Currently Reading",
-      "Want to Read",
+      "Want To Read",
       "Already Read",
       "None ✓",
     ];
