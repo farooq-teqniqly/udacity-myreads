@@ -93,5 +93,27 @@ describe("end-to-end scenarios", () => {
         cy.getBookshelf(shelf).find(".books-grid li").should("not.exist");
       });
     });
+
+    it("doesn't move the book when the same shelf is selected", () => {
+      const query = "poetry";
+      const title = "Paradise Lost";
+      const shelves = ["Want To Read", "Currently Reading", "Already Read"];
+      const wantToReadOptionValue = "wantToRead";
+
+      cy.doSearch(query);
+      cy.selectBookByTitle(title).addToShelf(shelves[0]);
+      cy.closeSearch();
+
+      cy.selectBookByTitle(title).addToShelf(wantToReadOptionValue);
+      cy.selectBookByTitle(title).addToShelf(wantToReadOptionValue);
+
+      cy.getBookshelf(shelves[0])
+        .find(".books-grid li")
+        .should("have.length", 1);
+
+      shelves.slice(1).forEach((shelf) => {
+        cy.getBookshelf(shelf).find(".books-grid li").should("not.exist");
+      });
+    });
   });
 });
