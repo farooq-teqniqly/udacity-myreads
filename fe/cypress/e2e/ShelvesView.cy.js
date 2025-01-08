@@ -27,4 +27,18 @@ describe("shelves view", () => {
     cy.openSearch();
     cy.get(".search-books-input-wrapper input").should("be.visible");
   });
+
+  it("retains the shelved books on refresh", () => {
+    const title = "A Poetry Handbook";
+    const shelf = "Already Read";
+
+    cy.openSearch();
+    cy.doSearch("poetry");
+    cy.selectBookByTitle(title).addToShelf("Already Read");
+    cy.closeSearch();
+    cy.selectBookByTitle(title);
+    cy.getBookshelf(shelf).find(".books-grid li").should("have.length", 1);
+    cy.reload();
+    cy.getBookshelf(shelf).find(".books-grid li").should("have.length", 1);
+  });
 });
