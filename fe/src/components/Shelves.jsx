@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { Book } from "./Book";
-import { BookPropType } from "../propTypes";
+import { ShelfPropType } from "../propTypes";
 
 export const Shelves = ({ shelves, onShelfChanged }) => {
   const makeFriendlyShelfName = (shelfName) => {
@@ -29,10 +29,6 @@ export const Shelves = ({ shelves, onShelfChanged }) => {
 };
 
 Shelves.propTypes = {
-  shelves: PropTypes.shape({
-    wantToRead: PropTypes.arrayOf(BookPropType),
-    currentlyReading: PropTypes.arrayOf(BookPropType),
-    alreadyRead: PropTypes.arrayOf(BookPropType),
-  }).isRequired,
+  shelves: ShelfPropType,
   onShelfChanged: PropTypes.func.isRequired,
 };
