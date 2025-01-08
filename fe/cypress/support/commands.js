@@ -38,3 +38,14 @@ Cypress.Commands.add("clearSearch", () => {
 Cypress.Commands.add("closeSearch", () => {
   cy.get(".close-search").click();
 });
+
+Cypress.Commands.add("selectBookByTitle", (title) => {
+  cy.get(".book")
+    .contains(".book-title", title)
+    .closest(".book")
+    .as("selectedBook");
+});
+
+Cypress.Commands.add("verifyBookAuthors", (authors) => {
+  cy.get("@selectedBook").find(".book-authors").should("have.text", authors);
+});

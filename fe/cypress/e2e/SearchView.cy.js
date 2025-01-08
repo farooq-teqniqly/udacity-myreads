@@ -57,23 +57,25 @@ describe("Search view", () => {
   it("formats multiple authors as a comma separated string", () => {
     cy.doSearch("football");
 
-    cy.get(".book")
-      .contains(
-        ".book-title",
-        "The Origins and Development of Football in Ireland"
-      )
-      .closest(".book")
-      .find(".book-authors")
-      .should("have.text", "Richard M. Peter, Neal Garnham");
+    cy.selectBookByTitle(
+      "The Origins and Development of Football in Ireland"
+    ).verifyBookAuthors("Richard M. Peter, Neal Garnham");
   });
 
   it("displays `No authors listed` when book has no authors", () => {
     cy.doSearch("football");
 
-    cy.get(".book")
-      .contains(".book-title", "Football Kicking and Punting")
-      .closest(".book")
-      .find(".book-authors")
-      .should("have.text", "No authors listed");
+    cy.selectBookByTitle("Football Kicking and Punting").verifyBookAuthors(
+      "No authors listed"
+    );
+  });
+
+  it("displays no image for books without a thumbnail", () => {
+    cy.doSearch("bio");
+
+    cy.selectBookByTitle("My First Life")
+      .find(".book-cover")
+      .should("have.css", "background-image")
+      .and("include", "undefined");
   });
 });
