@@ -1,12 +1,13 @@
 import PropTypes from "prop-types";
 import { Book } from "./Book";
-import { BookPropType } from "../propTypes";
+import { BookPropType, ShelfPropType } from "../propTypes";
 
 export const Search = ({
   onClosed,
   onQueryChanged,
   searchResults,
   onShelfChanged,
+  shelves,
 }) => {
   return (
     <div className="search-books">
@@ -26,7 +27,11 @@ export const Search = ({
         <ol className="books-grid">
           {searchResults.map((book, index) => (
             <li key={index}>
-              <Book book={book} onShelfChanged={onShelfChanged} />
+              <Book
+                book={book}
+                onShelfChanged={onShelfChanged}
+                shelves={shelves}
+              />
             </li>
           ))}
         </ol>
@@ -40,4 +45,5 @@ Search.propTypes = {
   onQueryChanged: PropTypes.func.isRequired,
   onShelfChanged: PropTypes.func.isRequired,
   searchResults: PropTypes.arrayOf(BookPropType),
+  shelves: ShelfPropType,
 };

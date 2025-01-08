@@ -127,6 +127,7 @@ const App = () => {
           onQueryChanged={(q) => setQuery(q)}
           searchResults={searchResults}
           onShelfChanged={onShelfChanged}
+          shelves={shelves}
         />
       ) : (
         <div className="list-books">

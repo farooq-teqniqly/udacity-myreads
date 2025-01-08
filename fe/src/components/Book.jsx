@@ -1,7 +1,8 @@
 import PropTypes from "prop-types";
-import { BookPropType } from "../propTypes";
+import { BookPropType, ShelfPropType } from "../propTypes";
+import { makeFriendlyShelfName } from "../helpers";
 
-export const Book = ({ book, onShelfChanged }) => {
+export const Book = ({ book, onShelfChanged, shelves }) => {
   const { imageUrl, title, authors, currentShelf } = book;
 
   return (
@@ -23,15 +24,12 @@ export const Book = ({ book, onShelfChanged }) => {
             <option value="moveTo" disabled>
               Move to...
             </option>
-            <option value="currentlyReading">
-              Currently Reading{currentShelf === "currentlyReading" ? " ✓" : ""}
-            </option>
-            <option value="wantToRead">
-              Want To Read{currentShelf === "wantToRead" ? " ✓" : ""}
-            </option>
-            <option value="alreadyRead">
-              Already Read{currentShelf === "alreadyRead" ? " ✓" : ""}
-            </option>
+            {Object.keys(shelves).map((shelf, index) => (
+              <option key={index} value={shelf}>
+                {makeFriendlyShelfName(shelf)}
+                {currentShelf === shelf ? " ✓" : ""}
+              </option>
+            ))}
             <option value="none">
               None{currentShelf === "none" || !currentShelf ? " ✓" : ""}
             </option>
@@ -47,4 +45,5 @@ export const Book = ({ book, onShelfChanged }) => {
 Book.propTypes = {
   book: BookPropType,
   onShelfChanged: PropTypes.func.isRequired,
+  shelves: ShelfPropType,
 };

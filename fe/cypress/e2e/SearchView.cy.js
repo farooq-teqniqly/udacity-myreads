@@ -35,8 +35,8 @@ describe("Search view", () => {
   it("displays the shelf dropdown for each book and `none` is selected by default", () => {
     const expectedOptions = [
       "Move to...",
-      "Currently Reading",
       "Want To Read",
+      "Currently Reading",
       "Already Read",
       "None ✓",
     ];
