@@ -1,57 +1,152 @@
 import "./App.css";
-import { Bookshelf } from "./components/Bookshelf";
-import { SearchBook } from "./components/SearchBook";
-import { SearchResults } from "./components/SearchResults";
-import { SHELVES } from "./shelves";
-import { useShelves } from "./hooks/useShelves";
-import { useSearch } from "./hooks/useSearch";
+import { useEffect, useState } from "react";
+import { Shelves } from "./components/Shelves";
+import { Search } from "./components/Search";
+import * as api from "./BooksAPI";
 
 const App = () => {
-  const { placeBook, getShelf } = useShelves();
+  const [showSearchPage, setShowSearchpage] = useState(false);
+  const [query, setQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [firstSearch, setFirstSearch] = useState(true);
 
-  const {
-    showSearchPage,
-    searchResults,
-    search,
-    closeSearch,
-    openSearch,
-    noResults,
-    apiError,
-  } = useSearch();
+  const [shelves, setShelves] = useState({
+    wantToRead: [],
+    currentlyReading: [],
+    alreadyRead: [],
+  });
+
+  useEffect(() => {
+    const savedShelves = JSON.parse(localStorage.getItem("shelves")) || {
+      wantToRead: [],
+      currentlyReading: [],
+      alreadyRead: [],
+    };
+
+    setShelves(savedShelves);
+  }, []);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedQuery(query);
+    }, 1000);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [query]);
+
+  useEffect(() => {
+    const fetchSearchResults = async () => {
+      const transformedQuery = debouncedQuery.trim().toLowerCase();
+
+      if (transformedQuery.length === 0) {
+        setSearchResults([]);
+        return;
+      }
+
+      const res = await api.search(transformedQuery);
+
+      if (res.error) {
+        setSearchResults([]);
+        setFirstSearch(false);
+        return;
+      }
+
+      const searchResultBooks = res.map((book) => {
+        if (!book.authors) {
+          book.authors = ["No authors listed"];
+        }
+
+        return {
+          id: book.id,
+          authors: book.authors,
+          title: book.title,
+          imageUrl: book.imageLinks?.smallThumbnail,
+        };
+      });
+
+      const shelves = JSON.parse(localStorage.getItem("shelves"));
+
+      let localStorageBooks = [];
+
+      if (shelves) {
+        localStorageBooks = Object.values(shelves).flat();
+      }
+
+      const matchingBooks = localStorageBooks.filter((localBook) => {
+        return searchResultBooks.some(
+          (searchResultBook) => searchResultBook.id === localBook.id
+        );
+      });
+
+      const mergedResult = searchResultBooks.map((searchResultBook) => {
+        const matchingBook = matchingBooks.find(
+          (matchingBook) => matchingBook.id === searchResultBook.id
+        );
+        return matchingBook
+          ? { ...searchResultBook, ...matchingBook }
+          : searchResultBook;
+      });
+
+      setSearchResults(mergedResult);
+      setFirstSearch(false);
+    };
+
+    fetchSearchResults();
+  }, [debouncedQuery, shelves]);
+
+  const onShelfChanged = (book, newShelf) => {
+    book.currentShelf = newShelf;
+
+    const updatedShelves = {
+      wantToRead: shelves.wantToRead.filter((b) => b.id !== book.id),
+      currentlyReading: shelves.currentlyReading.filter(
+        (b) => b.id !== book.id
+      ),
+      alreadyRead: shelves.alreadyRead.filter((b) => b.id !== book.id),
+    };
+
+    if (newShelf !== "none") {
+      updatedShelves[newShelf] = [...updatedShelves[newShelf], book];
+    }
+
+    setShelves(updatedShelves);
+    localStorage.setItem("shelves", JSON.stringify(updatedShelves));
+  };
+
+  const onSearchClosed = () => {
+    setShowSearchpage(false);
+    setQuery("");
+    setSearchResults([]);
+    setFirstSearch(false);
+  };
 
   return (
     <div className="app">
       {showSearchPage ? (
-        <div className="search-books">
-          <SearchBook onClose={closeSearch} onSearch={(q) => search(q)} />
-          <SearchResults
-            results={searchResults}
-            onBookSelected={placeBook}
-            showNoResultsMessage={noResults}
-            showApiErrorMessage={apiError}
-          />
-        </div>
+        <Search
+          onClosed={onSearchClosed}
+          onQueryChanged={(q) => setQuery(q)}
+          searchResults={searchResults}
+          onShelfChanged={onShelfChanged}
+          shelves={shelves}
+          firstSearch={firstSearch}
+        />
       ) : (
         <div className="list-books">
           <div className="list-books-title">
             <h1>MyReads</h1>
           </div>
           <div className="list-books-content">
-            <div>
-              {Object.values(SHELVES).map((shelf) => (
-                <Bookshelf
-                  key={shelf.id}
-                  id={shelf.id}
-                  label={shelf.label}
-                  books={getShelf(shelf.id)}
-                  onBookSelected={placeBook}
-                  visible={shelf.visible}
-                />
-              ))}
-            </div>
+            <Shelves
+              shelves={shelves}
+              onShelfChanged={onShelfChanged}
+            ></Shelves>
           </div>
           <div className="open-search">
-            <a onClick={openSearch}>Add a book</a>
+            <a onClick={() => setShowSearchpage(true)}>Add a book</a>
           </div>
         </div>
       )}

@@ -1,27 +1,9 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
-import { useShelves } from "../hooks/useShelves";
+import { BookPropType, ShelfPropType } from "../propTypes";
+import { makeFriendlyShelfName } from "../helpers";
 
-export const Book = ({ book, onSelected }) => {
-  const { title, smallThumbnail } = book;
-  let authors = book.authors;
-
-  if (!authors) {
-    authors = ["No author listed"];
-  }
-
-  const [selectedShelf, setSelectedShelf] = useState("none");
-
-  const handleSelectedShelf = (shelfId, book) => {
-    if (selectedShelf === shelfId) {
-      return;
-    }
-
-    setSelectedShelf(shelfId);
-    onSelected(shelfId, book);
-  };
-
-  const { getAllShelves } = useShelves();
+export const Book = ({ book, onShelfChanged, shelves }) => {
+  const { imageUrl, title, authors, currentShelf } = book;
 
   return (
     <div className="book">
@@ -31,25 +13,26 @@ export const Book = ({ book, onSelected }) => {
           style={{
             width: 128,
             height: 193,
-            backgroundImage: `url(${smallThumbnail})`,
+            backgroundImage: `url(${imageUrl})`,
           }}
         ></div>
         <div className="book-shelf-changer">
           <select
-            defaultValue="separator"
-            onChange={(e) => handleSelectedShelf(e.target.value, book)}
+            onChange={(e) => onShelfChanged(book, e.target.value)}
+            value="moveTo"
           >
-            <option value="none" disabled>
+            <option value="moveTo" disabled>
               Move to...
             </option>
-            <option value="separator" disabled>
-              -----
-            </option>
-            {getAllShelves().map((shelf) => (
-              <option key={shelf.id} value={shelf.id}>
-                {shelf.label} {selectedShelf === shelf.id ? "✓" : ""}
+            {Object.keys(shelves).map((shelf, index) => (
+              <option key={index} value={shelf}>
+                {makeFriendlyShelfName(shelf)}
+                {currentShelf === shelf ? " ✓" : ""}
               </option>
             ))}
+            <option value="none">
+              None{currentShelf === "none" || !currentShelf ? " ✓" : ""}
+            </option>
           </select>
         </div>
       </div>
@@ -60,10 +43,7 @@ export const Book = ({ book, onSelected }) => {
 };
 
 Book.propTypes = {
-  book: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    authors: PropTypes.arrayOf(PropTypes.string),
-    smallThumbnail: PropTypes.string.isRequired,
-  }),
-  onSelected: PropTypes.func.isRequired,
+  book: BookPropType,
+  onShelfChanged: PropTypes.func.isRequired,
+  shelves: ShelfPropType,
 };

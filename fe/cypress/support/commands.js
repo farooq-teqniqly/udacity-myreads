@@ -23,25 +23,40 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+Cypress.Commands.add("openSearch", () => {
+  cy.get(".open-search a").click();
+});
 
-Cypress.Commands.add("addBook", () => {
-  cy.get(".open-search a").should("be.visible").click();
+Cypress.Commands.add("doSearch", (query) => {
+  cy.get(".search-books-input-wrapper input").type(query);
+});
+
+Cypress.Commands.add("clearSearch", () => {
+  cy.get(".search-books-input-wrapper input").clear();
 });
 
 Cypress.Commands.add("closeSearch", () => {
-  cy.get(".close-search").should("be.visible").click();
+  cy.get(".close-search").click();
 });
 
-Cypress.Commands.add("search", (query) => {
-  cy.get("input").clear();
-  cy.get("input").type(query);
-  cy.get("#search-book-button").click();
+Cypress.Commands.add("selectBookByTitle", (title) => {
+  cy.get(".book")
+    .contains(".book-title", title)
+    .closest(".book")
+    .as("selectedBook");
 });
 
-Cypress.Commands.add("addBookToShelf", (bookIndex, shelfId) => {
-  cy.get(".book-title")
-    .eq(bookIndex)
-    .parent()
-    .find(".book-shelf-changer select")
-    .select(shelfId);
+Cypress.Commands.add("verifyBookAuthors", (authors) => {
+  cy.get("@selectedBook").find(".book-authors").should("have.text", authors);
+});
+
+Cypress.Commands.add("addToShelf", (shelf) => {
+  cy.get("@selectedBook").find("select").select(shelf);
+});
+
+Cypress.Commands.add("getBookshelf", (shelf) => {
+  cy.get(".bookshelf")
+    .contains(".bookshelf-title", shelf)
+    .closest(".bookshelf")
+    .as("bookshelfBooks");
 });
