@@ -52,7 +52,7 @@ const App = () => {
         return;
       }
 
-      const books = res.map((book) => {
+      const searchResultBooks = res.map((book) => {
         if (!book.authors) {
           book.authors = ["No authors listed"];
         }
@@ -65,7 +65,30 @@ const App = () => {
         };
       });
 
-      setSearchResults(books);
+      const shelves = JSON.parse(localStorage.getItem("shelves"));
+
+      let localStorageBooks = [];
+
+      if (shelves) {
+        localStorageBooks = Object.values(shelves).flat();
+      }
+
+      const matchingBooks = localStorageBooks.filter((localBook) => {
+        return searchResultBooks.some(
+          (searchResultBook) => searchResultBook.id === localBook.id
+        );
+      });
+
+      const mergedResult = searchResultBooks.map((searchResultBook) => {
+        const matchingBook = matchingBooks.find(
+          (matchingBook) => matchingBook.id === searchResultBook.id
+        );
+        return matchingBook
+          ? { ...searchResultBook, ...matchingBook }
+          : searchResultBook;
+      });
+
+      setSearchResults(mergedResult);
     };
 
     fetchSearchResults();

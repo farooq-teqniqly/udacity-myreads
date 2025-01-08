@@ -39,11 +39,12 @@ describe("end-to-end scenarios", () => {
 
     it("will not add the same book to the same shelf twice", () => {
       const shelf = "Want To Read";
+      const shelfOptionValue = "wantToRead";
 
       cy.doSearch("baseball");
-      cy.selectBookByTitle("Lefty O'Doul").addToShelf(shelf);
-      cy.selectBookByTitle("Lefty O'Doul").addToShelf(shelf);
-      cy.selectBookByTitle("Lefty O'Doul").addToShelf(shelf);
+      cy.selectBookByTitle("Lefty O'Doul").addToShelf(shelfOptionValue);
+      cy.selectBookByTitle("Lefty O'Doul").addToShelf(shelfOptionValue);
+      cy.selectBookByTitle("Lefty O'Doul").addToShelf(shelfOptionValue);
       cy.closeSearch();
 
       cy.getBookshelf(shelf).find(".books-grid li").should("have.length", 1);
@@ -114,6 +115,26 @@ describe("end-to-end scenarios", () => {
       shelves.slice(1).forEach((shelf) => {
         cy.getBookshelf(shelf).find(".books-grid li").should("not.exist");
       });
+    });
+
+    it("for books in s shelf, it shows the correct shelf on the search page", () => {
+      const query = "poetry";
+      const title = "Paradise Lost";
+      const shelf = "Want To Read";
+      const wantToReadOptionValue = "wantToRead";
+
+      cy.doSearch(query);
+      cy.selectBookByTitle(title).addToShelf(shelf);
+      cy.closeSearch();
+
+      cy.selectBookByTitle(title);
+      cy.openSearch();
+      cy.doSearch(query);
+
+      cy.selectBookByTitle(title)
+        .find("select")
+        .find(`option[value="${wantToReadOptionValue}"]`)
+        .should("contain.text", "✓");
     });
   });
 });
