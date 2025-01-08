@@ -9,6 +9,7 @@ const App = () => {
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [firstSearch, setFirstSearch] = useState(true);
 
   const [shelves, setShelves] = useState({
     wantToRead: [],
@@ -49,6 +50,7 @@ const App = () => {
 
       if (res.error) {
         setSearchResults([]);
+        setFirstSearch(false);
         return;
       }
 
@@ -89,6 +91,7 @@ const App = () => {
       });
 
       setSearchResults(mergedResult);
+      setFirstSearch(false);
     };
 
     fetchSearchResults();
@@ -117,6 +120,7 @@ const App = () => {
     setShowSearchpage(false);
     setQuery("");
     setSearchResults([]);
+    setFirstSearch(false);
   };
 
   return (
@@ -128,6 +132,7 @@ const App = () => {
           searchResults={searchResults}
           onShelfChanged={onShelfChanged}
           shelves={shelves}
+          firstSearch={firstSearch}
         />
       ) : (
         <div className="list-books">

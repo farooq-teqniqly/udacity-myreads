@@ -10,6 +10,22 @@ describe("Search view", () => {
     cy.get(".list-books-title").should("be.visible");
   });
 
+  it("shows a helpful message when first opened", () => {
+    cy.get(".search-books-results h2").should(
+      "have.text",
+      'Type a category in the search box, i.e. "Biography"'
+    );
+  });
+
+  it("lets the user no when there are no search results", () => {
+    cy.doSearch("foobar");
+
+    cy.get(".search-books-results h2").should(
+      "have.text",
+      "Your search yielded no results."
+    );
+  });
+
   it("query is cleared when the close button is clicked and search reopened", () => {
     cy.doSearch("biography");
     cy.closeSearch();

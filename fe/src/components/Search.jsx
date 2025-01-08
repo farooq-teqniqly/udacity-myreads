@@ -8,6 +8,7 @@ export const Search = ({
   searchResults,
   onShelfChanged,
   shelves,
+  firstSearch,
 }) => {
   return (
     <div className="search-books">
@@ -24,17 +25,23 @@ export const Search = ({
         </div>
       </div>
       <div className="search-books-results">
-        <ol className="books-grid">
-          {searchResults.map((book, index) => (
-            <li key={index}>
-              <Book
-                book={book}
-                onShelfChanged={onShelfChanged}
-                shelves={shelves}
-              />
-            </li>
-          ))}
-        </ol>
+        {firstSearch ? (
+          <h2>Type a category in the search box, i.e. &quot;Biography&quot;</h2>
+        ) : searchResults.length === 0 ? (
+          <h2>Your search yielded no results.</h2>
+        ) : (
+          <ol className="books-grid">
+            {searchResults.map((book, index) => (
+              <li key={index}>
+                <Book
+                  book={book}
+                  onShelfChanged={onShelfChanged}
+                  shelves={shelves}
+                />
+              </li>
+            ))}
+          </ol>
+        )}
       </div>
     </div>
   );
@@ -46,4 +53,5 @@ Search.propTypes = {
   onShelfChanged: PropTypes.func.isRequired,
   searchResults: PropTypes.arrayOf(BookPropType),
   shelves: ShelfPropType,
+  firstSearch: PropTypes.bool.isRequired,
 };
