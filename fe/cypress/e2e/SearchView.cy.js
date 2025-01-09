@@ -94,4 +94,8 @@ describe("Search view", () => {
       .should("have.css", "background-image")
       .and("include", "undefined");
   });
+
+  it("focuses the input box when first opened", () => {
+    cy.get(".search-books-input-wrapper input").should("be.focused");
+  });
 });
