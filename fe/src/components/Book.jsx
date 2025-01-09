@@ -19,7 +19,7 @@ export const Book = ({ book, onShelfChanged, shelves }) => {
         <div className="book-shelf-changer">
           <select
             onChange={(e) => onShelfChanged(book, e.target.value)}
-            value="moveTo"
+            value={currentShelf || "none"}
           >
             <option value="moveTo" disabled>
               Move to...
