@@ -141,5 +141,24 @@ describe("end-to-end scenarios", () => {
         .find(`option[value="${wantToReadOptionValue}"]`)
         .should("contain.text", "✓");
     });
+
+    it("preserves books when book is moved and browser refreshed", () => {
+      cy.closeSearch();
+
+      const title = "Lords of Finance";
+      cy.selectBookByTitle(title).addToShelf("Currently Reading");
+
+      cy.selectBookByTitle(title)
+        .closest(".bookshelf")
+        .find(".bookshelf-title")
+        .should("have.text", "Currently Reading");
+
+      cy.reload();
+
+      cy.selectBookByTitle(title)
+        .closest(".bookshelf")
+        .find(".bookshelf-title")
+        .should("have.text", "Currently Reading");
+    });
   });
 });

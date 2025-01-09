@@ -21,7 +21,7 @@ const App = () => {
     const fetchBooks = async () => {
       const res = await api.getAll();
 
-      const books = res.map((book) => {
+      const downloadedBooks = res.map((book) => {
         const shelf = book.shelf === "read" ? "alreadyRead" : book.shelf;
         const authors =
           book.authors.length === 0 ? ["No authors listed."] : book.authors;
@@ -33,15 +33,29 @@ const App = () => {
           imageUrl: book.imageLinks?.smallThumbnail,
           currentShelf: shelf,
         };
-      });
+      }, []);
 
-      const wantToReadBooks = books.filter(
+      const shelves = JSON.parse(localStorage.getItem("shelves"));
+      let localStorageBooks = [];
+
+      if (shelves) {
+        localStorageBooks = Object.values(shelves).flat();
+      }
+
+      const mergedBooks = [
+        ...localStorageBooks,
+        ...downloadedBooks.filter(
+          (db) => !localStorageBooks.some((lb) => lb.id === db.id)
+        ),
+      ];
+
+      const wantToReadBooks = mergedBooks.filter(
         (book) => book.currentShelf === "wantToRead"
       );
-      const currentlyReadingBooks = books.filter(
+      const currentlyReadingBooks = mergedBooks.filter(
         (book) => book.currentShelf === "currentlyReading"
       );
-      const alreadyReadBooks = books.filter(
+      const alreadyReadBooks = mergedBooks.filter(
         (book) => book.currentShelf === "alreadyRead"
       );
 
