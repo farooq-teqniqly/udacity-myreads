@@ -7,15 +7,34 @@ describe("shelves view", () => {
     cy.get(".list-books-title").should("have.text", "MyReads");
   });
 
-  it("renders the bookshelves without any books", () => {
-    const shelves = ["Want To Read", "Currently Reading", "Already Read"];
+  it("renders the bookshelves with default books", () => {
+    const shelves = [
+      {
+        name: "Want To Read",
+        books: ["The Cuckoo's Calling", "Lords of Finance"],
+      },
+      {
+        name: "Currently Reading",
+        books: [
+          "The Linux Command Line",
+          "Learning Web Development with React and Bootstrap",
+        ],
+      },
+      {
+        name: "Already Read",
+        books: ["Needful Things", "React", "Satire TV"],
+      },
+    ];
 
-    shelves.forEach((shelf, index) => {
-      cy.get(".bookshelf-title").eq(index).should("have.text", shelf);
-    });
+    shelves.forEach((shelf) => {
+      cy.contains(".bookshelf-title", shelf.name)
+        .parents(".bookshelf")
+        .find(".books-grid .book-title")
+        .then((titles) => {
+          const bookTitles = [...titles].map((t) => t.innerText);
 
-    cy.get(".bookshelf").each((shelf) => {
-      cy.wrap(shelf).find("li").should("not.exist");
+          expect(bookTitles).to.deep.equal(shelf.books);
+        });
     });
   });
 
@@ -29,16 +48,35 @@ describe("shelves view", () => {
   });
 
   it("retains the shelved books on refresh", () => {
-    const title = "A Poetry Handbook";
-    const shelf = "Already Read";
+    const shelves = [
+      {
+        name: "Want To Read",
+        books: ["The Cuckoo's Calling", "Lords of Finance"],
+      },
+      {
+        name: "Currently Reading",
+        books: [
+          "The Linux Command Line",
+          "Learning Web Development with React and Bootstrap",
+        ],
+      },
+      {
+        name: "Already Read",
+        books: ["Needful Things", "React", "Satire TV"],
+      },
+    ];
 
-    cy.openSearch();
-    cy.doSearch("poetry");
-    cy.selectBookByTitle(title).addToShelf("Already Read");
-    cy.closeSearch();
-    cy.selectBookByTitle(title);
-    cy.getBookshelf(shelf).find(".books-grid li").should("have.length", 1);
     cy.reload();
-    cy.getBookshelf(shelf).find(".books-grid li").should("have.length", 1);
+
+    shelves.forEach((shelf) => {
+      cy.contains(".bookshelf-title", shelf.name)
+        .parents(".bookshelf")
+        .find(".books-grid .book-title")
+        .then((titles) => {
+          const bookTitles = [...titles].map((t) => t.innerText);
+
+          expect(bookTitles).to.deep.equal(shelf.books);
+        });
+    });
   });
 });

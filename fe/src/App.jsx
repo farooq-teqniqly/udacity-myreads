@@ -18,13 +18,43 @@ const App = () => {
   });
 
   useEffect(() => {
-    const savedShelves = JSON.parse(localStorage.getItem("shelves")) || {
-      wantToRead: [],
-      currentlyReading: [],
-      alreadyRead: [],
+    const fetchBooks = async () => {
+      const res = await api.getAll();
+
+      const books = res.map((book) => {
+        const shelf = book.shelf === "read" ? "alreadyRead" : book.shelf;
+        const authors =
+          book.authors.length === 0 ? ["No authors listed."] : book.authors;
+
+        return {
+          id: book.id,
+          title: book.title,
+          authors: authors,
+          imageUrl: book.imageLinks?.smallThumbnail,
+          currentShelf: shelf,
+        };
+      });
+
+      const wantToReadBooks = books.filter(
+        (book) => book.currentShelf === "wantToRead"
+      );
+      const currentlyReadingBooks = books.filter(
+        (book) => book.currentShelf === "currentlyReading"
+      );
+      const alreadyReadBooks = books.filter(
+        (book) => book.currentShelf === "alreadyRead"
+      );
+
+      const savedShelves = {
+        wantToRead: wantToReadBooks,
+        currentlyReading: currentlyReadingBooks,
+        alreadyRead: alreadyReadBooks,
+      };
+
+      setShelves(savedShelves);
     };
 
-    setShelves(savedShelves);
+    fetchBooks();
   }, []);
 
   useEffect(() => {
