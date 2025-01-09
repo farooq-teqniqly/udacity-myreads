@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { Book } from "./Book";
 import { BookPropType, ShelfPropType } from "../propTypes";
+import { useEffect, useRef } from "react";
 
 export const Search = ({
   onClosed,
@@ -10,6 +11,14 @@ export const Search = ({
   shelves,
   firstSearch,
 }) => {
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
   return (
     <div className="search-books">
       <div className="search-books-bar">
@@ -21,6 +30,7 @@ export const Search = ({
             type="text"
             placeholder="Search by title, author, or ISBN"
             onChange={(e) => onQueryChanged(e.target.value)}
+            ref={inputRef}
           />
         </div>
       </div>

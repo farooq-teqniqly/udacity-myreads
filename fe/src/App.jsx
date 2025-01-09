@@ -10,6 +10,7 @@ const App = () => {
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [firstSearch, setFirstSearch] = useState(true);
+  const [refetchTrigger, setRefetchTrigger] = useState(false);
 
   const [shelves, setShelves] = useState({
     wantToRead: [],
@@ -37,41 +38,27 @@ const App = () => {
         };
       }, []);
 
-      const shelves = JSON.parse(localStorage.getItem("shelves"));
-      let localStorageBooks = [];
-
-      if (shelves) {
-        localStorageBooks = Object.values(shelves).flat();
-      }
-
-      const mergedBooks = [
-        ...localStorageBooks,
-        ...downloadedBooks.filter(
-          (db) => !localStorageBooks.some((lb) => lb.id === db.id)
-        ),
-      ];
-
-      const wantToReadBooks = mergedBooks.filter(
+      const wantToReadBooks = downloadedBooks.filter(
         (book) => book.currentShelf === "wantToRead"
       );
-      const currentlyReadingBooks = mergedBooks.filter(
+      const currentlyReadingBooks = downloadedBooks.filter(
         (book) => book.currentShelf === "currentlyReading"
       );
-      const alreadyReadBooks = mergedBooks.filter(
+      const alreadyReadBooks = downloadedBooks.filter(
         (book) => book.currentShelf === "alreadyRead"
       );
 
-      const savedShelves = {
+      const shelves = {
         wantToRead: wantToReadBooks,
         currentlyReading: currentlyReadingBooks,
         alreadyRead: alreadyReadBooks,
       };
 
-      setShelves(savedShelves);
+      setShelves(shelves);
     };
 
     fetchBooks();
-  }, []);
+  }, [refetchTrigger]);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -100,43 +87,34 @@ const App = () => {
         return;
       }
 
-      const searchResultBooks = res.map((book) => {
-        if (!book.authors) {
-          book.authors = ["No authors listed"];
-        }
+      const searchResultBooks = await Promise.all(
+        res.map(async (book) => {
+          const res = await api.get(book.id);
+          let shelf = res["shelf"];
 
-        return {
-          id: book.id,
-          authors: book.authors,
-          title: book.title,
-          imageUrl: book.imageLinks?.smallThumbnail,
-        };
-      });
+          if (!shelf) {
+            shelf = "none";
+          }
 
-      const shelves = JSON.parse(localStorage.getItem("shelves"));
+          if (shelf === "read") {
+            shelf = "alreadyRead";
+          }
 
-      let localStorageBooks = [];
+          if (!book.authors) {
+            book.authors = ["No authors listed"];
+          }
 
-      if (shelves) {
-        localStorageBooks = Object.values(shelves).flat();
-      }
+          return {
+            id: book.id,
+            authors: book.authors,
+            title: book.title,
+            imageUrl: book.imageLinks?.smallThumbnail,
+            currentShelf: shelf,
+          };
+        })
+      );
 
-      const matchingBooks = localStorageBooks.filter((localBook) => {
-        return searchResultBooks.some(
-          (searchResultBook) => searchResultBook.id === localBook.id
-        );
-      });
-
-      const mergedResult = searchResultBooks.map((searchResultBook) => {
-        const matchingBook = matchingBooks.find(
-          (matchingBook) => matchingBook.id === searchResultBook.id
-        );
-        return matchingBook
-          ? { ...searchResultBook, ...matchingBook }
-          : searchResultBook;
-      });
-
-      setSearchResults(mergedResult);
+      setSearchResults(searchResultBooks);
       setFirstSearch(false);
     };
 
@@ -144,22 +122,39 @@ const App = () => {
   }, [debouncedQuery, shelves]);
 
   const onShelfChanged = (book, newShelf) => {
-    book.currentShelf = newShelf;
+    const updateBook = async () => {
+      const shelf = newShelf === "alreadyRead" ? "read" : newShelf;
+      const res = await api.update(book, shelf);
 
-    const updatedShelves = {
-      wantToRead: shelves.wantToRead.filter((b) => b.id !== book.id),
-      currentlyReading: shelves.currentlyReading.filter(
-        (b) => b.id !== book.id
-      ),
-      alreadyRead: shelves.alreadyRead.filter((b) => b.id !== book.id),
+      const wantToReadBooks = await Promise.all(
+        res["wantToRead"].map(async (bookId) => {
+          return await api.get(bookId);
+        })
+      );
+
+      const currentlyReadingBooks = await Promise.all(
+        res["currentlyReading"].map(async (bookId) => {
+          return await api.get(bookId);
+        })
+      );
+
+      const alreadyReadBooks = await Promise.all(
+        res["read"].map(async (bookId) => {
+          return await api.get(bookId);
+        })
+      );
+
+      const shelves = {
+        wantToRead: wantToReadBooks,
+        currentlyReading: currentlyReadingBooks,
+        alreadyRead: alreadyReadBooks,
+      };
+
+      setShelves(shelves);
+      setRefetchTrigger((prev) => !prev);
     };
 
-    if (newShelf !== "none") {
-      updatedShelves[newShelf] = [...updatedShelves[newShelf], book];
-    }
-
-    setShelves(updatedShelves);
-    localStorage.setItem("shelves", JSON.stringify(updatedShelves));
+    updateBook();
   };
 
   const openSearch = () => {
