@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { Shelves } from "./components/Shelves";
 import { Search } from "./components/Search";
 import * as api from "./BooksAPI";
+import { Route, Routes, useNavigate } from "react-router-dom";
 
 const App = () => {
-  const [showSearchPage, setShowSearchpage] = useState(false);
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -16,6 +16,8 @@ const App = () => {
     currentlyReading: [],
     alreadyRead: [],
   });
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -160,40 +162,50 @@ const App = () => {
     localStorage.setItem("shelves", JSON.stringify(updatedShelves));
   };
 
-  const onSearchClosed = () => {
-    setShowSearchpage(false);
+  const openSearch = () => {
+    navigate("/search");
+  };
+
+  const closeSearch = () => {
     setQuery("");
     setSearchResults([]);
     setFirstSearch(false);
+    navigate("/");
   };
 
   return (
     <div className="app">
-      {showSearchPage ? (
-        <Search
-          onClosed={onSearchClosed}
-          onQueryChanged={(q) => setQuery(q)}
-          searchResults={searchResults}
-          onShelfChanged={onShelfChanged}
-          shelves={shelves}
-          firstSearch={firstSearch}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <div className="list-books">
+              <div className="list-books-title">
+                <h1>MyReads</h1>
+              </div>
+              <div className="list-books-content">
+                <Shelves shelves={shelves} onShelfChanged={onShelfChanged} />
+              </div>
+              <div className="open-search">
+                <a onClick={openSearch}>Add a book</a>
+              </div>
+            </div>
+          }
         />
-      ) : (
-        <div className="list-books">
-          <div className="list-books-title">
-            <h1>MyReads</h1>
-          </div>
-          <div className="list-books-content">
-            <Shelves
-              shelves={shelves}
+        <Route
+          path="/search"
+          element={
+            <Search
+              onClosed={closeSearch}
+              onQueryChanged={(q) => setQuery(q)}
+              searchResults={searchResults}
               onShelfChanged={onShelfChanged}
-            ></Shelves>
-          </div>
-          <div className="open-search">
-            <a onClick={() => setShowSearchpage(true)}>Add a book</a>
-          </div>
-        </div>
-      )}
+              shelves={shelves}
+              firstSearch={firstSearch}
+            />
+          }
+        />
+      </Routes>
     </div>
   );
 };
